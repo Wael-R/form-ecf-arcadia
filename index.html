@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,14 +8,7 @@
 	<link href="styles.css" rel="stylesheet">
 </head>
 <body>
-	<nav class="navbar bg-success text-light">
-		<div class="container-fluid">
-			<a href="index.html" class="navbar-brand text-light fw-bold">Arcadia</a> <!-- todo? png logo-->
-			// todo
-			<!-- todo (2): nav bar (accueil, services, habitats, connexion, contact) -->
-			<!-- todo: place navbar in a separate file to be imported to each page -->
-		</div>
-	</nav>
+	<div class="js-autoload">/components/navbar.html</div>
 
 	<div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
 		<div class="carousel-inner">
@@ -51,33 +44,13 @@
 	<hr>
 
 	<div class="main-row services px-2 px-sm-5">
-		<h2><a class="text-success fw-bold" href="#todo">Services</a></h2>
+		<h2><a class="text-success fw-bold" href="/services.html">Services</a></h2>
 		<div class="container px-2">
 			<div class="row row-cols-1 row-cols-md-2 g-2 align-items-start justify-content-center">
-				<div class="col-sm-12 col-md">
-					<div class="card text-center card-body"> <!-- these cards have no header image -->
-						<h5 class="card-title">Service Title A</h5>
-						<p class="card-text">Service description...</p>
-					</div>
-				</div>
-				<div class="col-sm-12 col-md">
-					<div class="card text-center card-body">
-						<h5 class="card-title">Service Title B</h5>
-						<p class="card-text">Service description...</p>
-					</div>
-				</div>
-				<div class="col-sm-12 col-md">
-					<div class="card text-center card-body">
-						<h5 class="card-title">Service Title C</h5>
-						<p class="card-text">Service description...</p>
-					</div>
-				</div>
-				<div class="col-sm-12 col-md">
-					<div class="card text-center card-body">
-						<h5 class="card-title">Service Title D</h5>
-						<p class="card-text">Service description...</p>
-					</div>
-				</div>
+				<div class="js-autoload">/components/svc_card.html</div>
+				<div class="js-autoload">/components/svc_card.html</div>
+				<div class="js-autoload">/components/svc_card.html</div>
+				<div class="js-autoload">/components/svc_card.html</div>
 			</div>
 		</div>
 		<!-- todo: (php) generate these cards instead of copy pasting -->
@@ -87,48 +60,12 @@
 	<hr>
 
 	<div class="main-row habitats px-2 px-sm-5">
-		<h2><a class="text-success fw-bold" href="#todo">Habitats</a></h2>
+		<h2><a class="text-success fw-bold" href="/habitats.html">Habitats</a></h2>
 		<div class="row row-cols-1 row-cols-md-2 g-2 align-items-start justify-content-center">
-			<div class="col-sm-12 col-md">
-				<div class="card text-center">
-					<img src="./content/placeholder.png" class="card-img-top" alt="placeholder">
-					<div class="card-body">
-						<h5 class="card-title">Habitat Title A</h5>
-						<h6 class="card-subtitle mb-2 text-body-secondary">Short description...</h6>
-						<a href="#todo" class="btn btn-success">Voir plus</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-12 col-md">
-				<div class="card text-center">
-					<img src="./content/placeholder.png" class="card-img-top" alt="placeholder">
-					<div class="card-body">
-						<h5 class="card-title">Habitat Title B</h5>
-						<h6 class="card-subtitle mb-2 text-body-secondary">Short description...</h6>
-						<a href="#todo" class="btn btn-success">Voir plus</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-12 col-md">
-				<div class="card text-center">
-					<img src="./content/placeholder.png" class="card-img-top" alt="placeholder">
-					<div class="card-body">
-						<h5 class="card-title">Habitat Title C</h5>
-						<h6 class="card-subtitle mb-2 text-body-secondary">Short description...</h6>
-						<a href="#todo" class="btn btn-success">Voir plus</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-12 col-md">
-				<div class="card text-center">
-					<img src="./content/placeholder.png" class="card-img-top" alt="placeholder">
-					<div class="card-body">
-						<h5 class="card-title">Habitat Title D</h5>
-						<h6 class="card-subtitle mb-2 text-body-secondary">Short description...</h6>
-						<a href="#todo" class="btn btn-success">Voir plus</a>
-					</div>
-				</div>
-			</div>
+			<div class="js-autoload">/components/other_card.html</div>
+			<div class="js-autoload">/components/other_card.html</div>
+			<div class="js-autoload">/components/other_card.html</div>
+			<div class="js-autoload">/components/other_card.html</div>
 		</div>
 		<!-- todo: (php) display list of habitats (max 4?) -->
 	</div>
@@ -136,52 +73,12 @@
 	<hr>
 
 	<div class="main-row animals px-2 px-sm-5">
-		<h2><a class="text-success fw-bold" href="#todo">Animaux</a></h2>
+		<h2><a class="text-success fw-bold" href="/animals.html">Animaux</a></h2>
 		<div class="row row-cols-1 row-cols-md-2 g-2 align-items-start justify-content-center">
-			<div class="col-sm-12 col-md">
-				<div class="card text-center">
-					<img src="./content/placeholder.png" class="card-img-top" alt="placeholder">
-					<div class="card-body">
-						<h5 class="card-title">Animal Name A</h5>
-						<h6 class="card-subtitle mb-2 text-body-secondary">Animal race...</h6>
-						<h6 class="card-subtitle mb-2 text-body-secondary">Animal habitat...</h6>
-						<a href="#todo" class="btn btn-success">Voir plus</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-12 col-md">
-				<div class="card text-center">
-					<img src="./content/placeholder.png" class="card-img-top" alt="placeholder">
-					<div class="card-body">
-						<h5 class="card-title">Animal Name B</h5>
-						<h6 class="card-subtitle mb-2 text-body-secondary">Animal race...</h6>
-						<h6 class="card-subtitle mb-2 text-body-secondary">Animal habitat...</h6>
-						<a href="#todo" class="btn btn-success">Voir plus</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-12 col-md">
-				<div class="card text-center">
-					<img src="./content/placeholder.png" class="card-img-top" alt="placeholder">
-					<div class="card-body">
-						<h5 class="card-title">Animal Name C</h5>
-						<h6 class="card-subtitle mb-2 text-body-secondary">Animal race...</h6>
-						<h6 class="card-subtitle mb-2 text-body-secondary">Animal habitat...</h6>
-						<a href="#todo" class="btn btn-success">Voir plus</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-12 col-md">
-				<div class="card text-center">
-					<img src="./content/placeholder.png" class="card-img-top" alt="placeholder">
-					<div class="card-body">
-						<h5 class="card-title">Animal Name D</h5>
-						<h6 class="card-subtitle mb-2 text-body-secondary">Animal race...</h6>
-						<h6 class="card-subtitle mb-2 text-body-secondary">Animal habitat...</h6>
-						<a href="#todo" class="btn btn-success">Voir plus</a>
-					</div>
-				</div>
-			</div>
+			<div class="js-autoload">/components/other_card.html</div>
+			<div class="js-autoload">/components/other_card.html</div>
+			<div class="js-autoload">/components/other_card.html</div>
+			<div class="js-autoload">/components/other_card.html</div>
 		</div>
 		<!-- todo: (php) display list of animals (max 4?) -->
 		<!-- todo? show only the most popular animals -->
@@ -198,5 +95,6 @@
 	</div>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script src="loader.js"></script>
 </body>
 </html>
