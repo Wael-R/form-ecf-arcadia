@@ -8,89 +8,91 @@
 	<link href="styles.css" rel="stylesheet">
 </head>
 <body>
-	<div class="js-autoload">/components/navbar.html</div>
+	<div class="main-container">
+		<div class="js-autoload">/components/navbar.html</div>
 
-	<div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
-		<div class="carousel-inner">
-			<div class="carousel-item active">
-				<img src="content/placeholder.png" class="d-block w-100" alt="todo (1)">
+		<div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
+			<div class="carousel-inner">
+				<div class="carousel-item active">
+					<img src="content/placeholder.png" class="d-block w-100" alt="todo (1)">
+				</div>
+				<div class="carousel-item">
+					<img src="content/placeholder.png" class="d-block w-100" alt="todo (2)">
+				</div>
+				<div class="carousel-item">
+					<img src="content/placeholder.png" class="d-block w-100" alt="todo (3)">
+				</div>
 			</div>
-			<div class="carousel-item">
-				<img src="content/placeholder.png" class="d-block w-100" alt="todo (2)">
-			</div>
-			<div class="carousel-item">
-				<img src="content/placeholder.png" class="d-block w-100" alt="todo (3)">
-			</div>
+			<button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Previous</span>
+			</button>
+			<button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Next</span>
+			</button>
 		</div>
-		<button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
-			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-			<span class="visually-hidden">Previous</span>
-		</button>
-		<button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
-			<span class="carousel-control-next-icon" aria-hidden="true"></span>
-			<span class="visually-hidden">Next</span>
-		</button>
-	</div>
 
-	<!-- todo? center rows -->
+		<!-- todo? center rows -->
 
-	<div class="main-row presentation px-2 px-sm-5">
-		<h2 class="fw-bold">Zoo Arcadia</h2>
-		<p>
-			lorem ipsum, etc. longer placeholder text because //todo just won't cut it! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-		</p>
-	</div>
+		<div class="main-row presentation px-2 px-sm-5">
+			<h2 class="fw-bold">Zoo Arcadia</h2>
+			<p>
+				lorem ipsum, etc. longer placeholder text because //todo just won't cut it! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			</p>
+		</div>
 
-	<hr>
+		<hr class="spacer">
 
-	<div class="main-row services px-2 px-sm-5">
-		<h2><a class="text-success fw-bold" href="/services.html">Services</a></h2>
-		<div class="container px-2">
+		<div class="main-row services px-2 px-sm-5">
+			<h2><a class="text-success fw-bold" href="/services.html">Services</a></h2>
+			<div class="container px-2">
+				<div class="row row-cols-1 row-cols-md-2 g-2 align-items-start justify-content-center">
+					<div class="js-autoload">/components/svc_card.html</div>
+					<div class="js-autoload">/components/svc_card.html</div>
+					<div class="js-autoload">/components/svc_card.html</div>
+					<div class="js-autoload">/components/svc_card.html</div>
+				</div>
+			</div>
+			<!-- todo: (php) generate these cards instead of copy pasting -->
+			<!-- todo: (php) display list of services (max 4?) -->
+		</div>
+
+		<hr class="spacer">
+
+		<div class="main-row habitats px-2 px-sm-5">
+			<h2><a class="text-success fw-bold" href="/habitats.html">Habitats</a></h2>
 			<div class="row row-cols-1 row-cols-md-2 g-2 align-items-start justify-content-center">
-				<div class="js-autoload">/components/svc_card.html</div>
-				<div class="js-autoload">/components/svc_card.html</div>
-				<div class="js-autoload">/components/svc_card.html</div>
-				<div class="js-autoload">/components/svc_card.html</div>
+				<div class="js-autoload">/components/other_card.html</div>
+				<div class="js-autoload">/components/other_card.html</div>
+				<div class="js-autoload">/components/other_card.html</div>
+				<div class="js-autoload">/components/other_card.html</div>
 			</div>
+			<!-- todo: (php) display list of habitats (max 4?) -->
 		</div>
-		<!-- todo: (php) generate these cards instead of copy pasting -->
-		<!-- todo: (php) display list of services (max 4?) -->
-	</div>
 
-	<hr>
+		<hr class="spacer">
 
-	<div class="main-row habitats px-2 px-sm-5">
-		<h2><a class="text-success fw-bold" href="/habitats.html">Habitats</a></h2>
-		<div class="row row-cols-1 row-cols-md-2 g-2 align-items-start justify-content-center">
-			<div class="js-autoload">/components/other_card.html</div>
-			<div class="js-autoload">/components/other_card.html</div>
-			<div class="js-autoload">/components/other_card.html</div>
-			<div class="js-autoload">/components/other_card.html</div>
+		<div class="main-row animals px-2 px-sm-5">
+			<h2><a class="text-success fw-bold" href="/animals.html">Animaux</a></h2>
+			<div class="row row-cols-1 row-cols-md-2 g-2 align-items-start justify-content-center">
+				<div class="js-autoload">/components/other_card.html</div>
+				<div class="js-autoload">/components/other_card.html</div>
+				<div class="js-autoload">/components/other_card.html</div>
+				<div class="js-autoload">/components/other_card.html</div>
+			</div>
+			<!-- todo: (php) display list of animals (max 4?) -->
+			<!-- todo? show only the most popular animals -->
 		</div>
-		<!-- todo: (php) display list of habitats (max 4?) -->
-	</div>
+		<!-- * for each of the above, the header should link over to the full corresponding list page -->
 
-	<hr>
-
-	<div class="main-row animals px-2 px-sm-5">
-		<h2><a class="text-success fw-bold" href="/animals.html">Animaux</a></h2>
-		<div class="row row-cols-1 row-cols-md-2 g-2 align-items-start justify-content-center">
-			<div class="js-autoload">/components/other_card.html</div>
-			<div class="js-autoload">/components/other_card.html</div>
-			<div class="js-autoload">/components/other_card.html</div>
-			<div class="js-autoload">/components/other_card.html</div>
-		</div>
-		<!-- todo: (php) display list of animals (max 4?) -->
-		<!-- todo? show only the most popular animals -->
-	</div>
-	<!-- * for each of the above, the header should link over to the full corresponding list page -->
-
-	<hr>
-
-	<div class="main-row reviews px-2 px-sm-5">
-		<h2>Avis</h2>
-		<div class="reviews-inner">
-			// todo
+		<hr class="spacer">
+	
+		<div class="main-row reviews px-2 px-sm-5">
+			<h2>Avis</h2>
+			<div class="reviews-inner">
+				// todo
+			</div>
 		</div>
 	</div>
 

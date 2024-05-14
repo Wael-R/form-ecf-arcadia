@@ -1,3 +1,30 @@
+body
+{
+	background-color: #EEE;
+}
+
+.main-container
+{
+	background-color: #FFF;
+	margin: auto;
+	max-width: 75%;
+	min-height: 100vh;
+}
+
+@media (max-width: 1024px)
+{
+	.main-container
+	{
+		margin: 0;
+		max-width: initial;
+	}
+}
+
+hr
+{
+	margin: 2rem 0;
+}
+
 .presentation
 {
 	margin: 4em 0;
