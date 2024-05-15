@@ -9,7 +9,7 @@
 </head>
 <body>
 	<div class="main-container">
-		<div class="js-autoload">/components/navbar.html</div>
+		<?php include("./components/navbar.php"); ?>
 
 		// todo: services
 	</div>

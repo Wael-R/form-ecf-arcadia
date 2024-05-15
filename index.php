@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Zoo Arcadia</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<link href="styles.css" rel="stylesheet">
+</head>
+<body>
+	<div class="main-container">
+		<?php include("./components/navbar.php"); ?>
+
+		<div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
+			<div class="carousel-inner">
+				<div class="carousel-item active">
+					<img src="content/placeholder.png" class="d-block w-100" alt="todo (1)">
+				</div>
+				<div class="carousel-item">
+					<img src="content/placeholder.png" class="d-block w-100" alt="todo (2)">
+				</div>
+				<div class="carousel-item">
+					<img src="content/placeholder.png" class="d-block w-100" alt="todo (3)">
+				</div>
+			</div>
+			<button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Previous</span>
+			</button>
+			<button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Next</span>
+			</button>
+		</div>
+
+		<!-- todo? center rows -->
+
+		<div class="main-row presentation px-2 px-sm-5">
+			<h2 class="fw-bold">Zoo Arcadia</h2>
+			<p>
+				lorem ipsum, etc. longer placeholder text because //todo just won't cut it! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			</p>
+		</div>
+
+		<hr class="spacer">
+
+		<div class="main-row services px-2 px-sm-5">
+			<h2><a class="text-success fw-bold" href="services.php">Services</a></h2>
+			<div class="container px-2">
+				<div class="row row-cols-1 row-cols-md-2 g-2 align-items-start justify-content-center">
+					<?php include("./components/svc_card.php"); ?>
+					<?php include("./components/svc_card.php"); ?>
+					<?php include("./components/svc_card.php"); ?>
+					<?php include("./components/svc_card.php"); ?>
+				</div>
+			</div>
+			<!-- todo: (php) generate these cards instead of copy pasting -->
+			<!-- todo: (php) display list of services (max 4?) -->
+		</div>
+
+		<hr class="spacer">
+
+		<div class="main-row habitats px-2 px-sm-5">
+			<h2><a class="text-success fw-bold" href="habitats.php">Habitats</a></h2>
+			<div class="row row-cols-1 row-cols-md-2 g-2 align-items-start justify-content-center">
+				<?php include("./components/other_card.php"); ?>
+				<?php include("./components/other_card.php"); ?>
+				<?php include("./components/other_card.php"); ?>
+				<?php include("./components/other_card.php"); ?>
+			</div>
+			<!-- todo: (php) display list of habitats (max 4?) -->
+		</div>
+
+		<hr class="spacer">
+
+		<div class="main-row animals px-2 px-sm-5">
+			<h2><a class="text-success fw-bold" href="animals.php">Animaux</a></h2>
+			<div class="row row-cols-1 row-cols-md-2 g-2 align-items-start justify-content-center">
+				<?php include("./components/other_card.php"); ?>
+				<?php include("./components/other_card.php"); ?>
+				<?php include("./components/other_card.php"); ?>
+				<?php include("./components/other_card.php"); ?>
+			</div>
+			<!-- todo: (php) display list of animals (max 4?) -->
+			<!-- todo? show only the most popular animals -->
+		</div>
+		<!-- * for each of the above, the header should link over to the full corresponding list page -->
+
+		<hr class="spacer">
+	
+		<div class="main-row reviews px-2 px-sm-5">
+			<h2>Avis</h2>
+			<div class="reviews-inner">
+				// todo
+			</div>
+		</div>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script src="loader.js"></script>
+</body>
+</html>
