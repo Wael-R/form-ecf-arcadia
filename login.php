@@ -11,7 +11,28 @@
 	<div class="main-container">
 		<?php include("./components/navbar.php"); ?>
 
-		// todo: connection
+		<br><br>
+
+		<div class="card login-card">
+			<h2 class="text-success fw-bold">Connexion</h2>
+			<h6>Pour administrateurs et employés</h6>
+
+			<hr class="spacer">
+
+			<form id="loginForm" action="javascript:void(0);">
+				<div class="mb-3">
+					<label for="email" class="form-label">Adresse Email</label>
+					<input type="email" class="form-control" id="email">
+				</div>
+
+				<div class="mb-3">
+					<label for="pass" class="form-label">Mot de passe</label>
+					<input type="password" class="form-control" id="pass">
+				</div>
+
+				<button type="submit" class="btn btn-success">Connexion</button>
+			</form>
+		</div>
 	</div>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

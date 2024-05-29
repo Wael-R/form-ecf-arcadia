@@ -11,7 +11,7 @@
 				<a class="text-light nav-link" href="habitats.php">Habitats</a>
 				<a class="text-light nav-link" href="animals.php">Animaux</a>
 				<a class="text-light nav-link" href="contact.php">Contact</a>
-				<a class="text-light nav-link" href="connection.php">Connexion</a>
+				<a class="text-light nav-link" href="login.php">Connexion</a>
 			</div>
 		</div>
 		<!-- todo (php): highlight (and disable?) active page in navbar -->

@@ -1,3 +1,5 @@
+/* * Generic styles */
+
 body
 {
 	background-color: #EEE;
@@ -35,4 +37,13 @@ hr
 	position: sticky;
 	top: 0;
 	z-index: 2; /* fsr carousels have a z index of 1 */
+}
+
+/* * Login page styles */
+
+.login-card
+{
+	margin: auto;
+	width: 30em;
+	padding: 1em;
 }
