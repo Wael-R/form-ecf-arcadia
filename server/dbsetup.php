@@ -20,7 +20,7 @@ CREATE TABLE accounts (
 DROP TABLE IF EXISTS sessions;
 CREATE TABLE sessions (
 	sessionId BINARY(16) UNIQUE,
-	userId varchar(23),
+	userId BINARY(16),
 	ipAddress VARCHAR(45),
 	created DATETIME NOT NULL,
 	PRIMARY KEY (sessionId),
