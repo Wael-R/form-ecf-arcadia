@@ -1,6 +1,17 @@
 <?php
 // * database setup; creates required sql databases and default entries
 
+if(php_sapi_name() != "cli")
+{
+	http_response_code(403);
+	exit();
+}
+
+echo("This will recreate all database tables and overwrite their data.\nType 'OK' to proceed...\n\n");
+
+if(readline() != "OK")
+	exit("\nCanceled database creation.\n\n");
+
 $config = json_decode(file_get_contents(__DIR__ . "/config.json"));
 
 $sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, null, $config->sql->port);
@@ -72,4 +83,4 @@ else
 	echo("Error creating admin account: " . $sqli->error . "\n\n");
 }
 
-echo("Database created.\n\n");
+echo("\nDatabase created.\n\n");
