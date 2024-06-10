@@ -1,3 +1,7 @@
+<?php
+require("./server/auth.php");
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -16,6 +20,8 @@
 			<hr class="spacer">
 
 			<form id="loginForm" action="javascript:void(0);">
+				<input type="hidden" id="token" value="<?= $csrfToken ?? "" ?>">
+
 				<div class="mb-3">
 					<label for="email" class="form-label">Adresse Email</label>
 					<input type="email" class="form-control" id="email">
@@ -43,6 +49,7 @@
 				const auth = "admin/authLogin.php";
 				const target = "admin/index.php";
 
+				let token = document.getElementById("token").value;
 				let email = document.getElementById("email").value;
 				let pass = document.getElementById("pass").value;
 
@@ -61,6 +68,7 @@
 				};
 
 				http.open("POST", auth);
+				http.setRequestHeader("Auth-Token", token);
 				http.setRequestHeader("Auth-Username", btoa(email));
 				http.setRequestHeader("Auth-Password", btoa(pass));
 

@@ -1,12 +1,41 @@
 <?php
+session_start();
+
+if($_SERVER['REQUEST_METHOD'] != "POST")
+	$_SESSION["csrfToken"] = md5(uniqid(mt_rand(), true));
+
+$csrfToken = $_SESSION["csrfToken"] ?? "";
+
+/** Returns a 403 HTTP error alongside a custom message */
 function connectionFail(string $message)
 {
 	http_response_code(403);
 	exit($message);
 }
 
+/** Returns true if the CSRF token sent in the Auth-Token header matches the currently set CSRF token */
+function checkCSRF(): bool
+{
+	global $csrfToken;
+
+	$heads = apache_request_headers();
+	$token = $heads["Auth-Token"];
+
+	if(!$token || $token != $csrfToken)
+		return false;
+
+	return true;
+}
+
+/** Logs in a user, expects Auth-Username, Auth-Password and Auth-Token headers to be set */
 function authLogin()
 {
+	if($_SERVER['REQUEST_METHOD'] != "POST" || !checkCSRF())
+	{
+		http_response_code(405);
+		return;
+	}
+
 	$heads = apache_request_headers();
 	$user = base64_decode($heads["Auth-Username"]);
 	$pass = base64_decode($heads["Auth-Password"]);
