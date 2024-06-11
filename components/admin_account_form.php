@@ -1,5 +1,5 @@
 <div class="card login-card">
-	<form id="accountForm" action="javascript:void(0);" autocomplete="off">
+	<form id="accountForm" action="javascript:void(0);">
 		<input type="hidden" id="token" value="<?= $csrfToken ?? "" ?>">
 
 		<div class="mb-3">
@@ -9,7 +9,7 @@
 
 		<div class="mb-3">
 			<label for="pass" class="form-label">Mot de passe</label>
-			<input type="password" class="form-control" id="pass">
+			<input type="password" class="form-control" id="pass" autocomplete="new-password">
 		</div>
 
 		<div class="mb-3">
