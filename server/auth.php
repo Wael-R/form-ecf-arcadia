@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+$config = json_decode(file_get_contents(__DIR__ . "/config.json"));
+
 if($_SERVER['REQUEST_METHOD'] != "POST")
 	$_SESSION["csrfToken"] = md5(uniqid(mt_rand(), true));
 
@@ -30,6 +32,8 @@ function checkCSRF(): bool
 /** Logs in a user, expects Auth-Username, Auth-Password and Auth-Token headers to be set */
 function authLogin()
 {
+	global $config;
+
 	if($_SERVER['REQUEST_METHOD'] != "POST" || !checkCSRF())
 	{
 		http_response_code(405);
@@ -47,26 +51,19 @@ function authLogin()
 		return;
 	}
 
-	$config = json_decode(file_get_contents(__DIR__ . "/config.json"));
-
 	$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
 
 	$res = $sqli->execute_query("SELECT BIN_TO_UUID(userId) as userId, password FROM accounts WHERE email = ?;", [$user]);
 
 	if(!$res)
 	{
-		connectionFail("Erreur inconnue (" . $sqli->errno . ")");
+		connectionFail("Erreur inconnue (1," . $sqli->errno . ")");
 		return;
 	}
 
 	$account = $res->fetch_row();
 
-	if($account == false)
-	{
-		connectionFail("Erreur inconnue (" . $sqli->errno . ")");
-		return;
-	}
-	else if($account == null)
+	if(!$account)
 	{
 		connectionFail("E-mail incorrecte");
 		return;
@@ -115,11 +112,16 @@ function authLogin()
 
 		if($sid)
 			setcookie("session", $sid, ["httponly" => true, "samesite" => true]); //todo? add "secure" => true (needs ssl)
+
+		$sqli->execute_query("DELETE FROM sessions WHERE created < DATE_SUB(NOW(), INTERVAL ? HOUR);", [$config->sessionTimeout]);
 	}
 }
 
+/** Checks if this user's session still exists and, if so, returns their account's role */
 function authCheck(): string
 {
+	global $config;
+
 	if(!isset($_COOKIE['session']))
 	{
 		connectionFail("");
@@ -128,11 +130,9 @@ function authCheck(): string
 
 	$sid = $_COOKIE['session'];
 
-	$config = json_decode(file_get_contents(__DIR__ . "/config.json"));
-
 	$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
 
-	$res = $sqli->execute_query("SELECT sessionId, userId, created, ipAddress FROM sessions WHERE token = UUID_TO_BIN(?) AND created < DATE_ADD(NOW(), INTERVAL ? HOUR);", [$sid, $config->sessionTimeout]);
+	$res = $sqli->execute_query("SELECT sessionId, userId, created, ipAddress FROM sessions WHERE token = UUID_TO_BIN(?) AND created > DATE_SUB(NOW(), INTERVAL ? HOUR);", [$sid, $config->sessionTimeout]);
 
 	if(!$res)
 	{
@@ -142,12 +142,7 @@ function authCheck(): string
 
 	$session = $res->fetch_row();
 
-	if($session == false)
-	{
-		connectionFail("Erreur inconnue (" . $sqli->errno . ")");
-		return "";
-	}
-	else if($session == null)
+	if(!$session)
 	{
 		connectionFail("Session invalide");
 		return "";
@@ -179,12 +174,7 @@ function authCheck(): string
 
 	$role = $res3->fetch_row();
 
-	if($role == false)
-	{
-		connectionFail("Erreur inconnue (" . $sqli->errno . ")");
-		return "";
-	}
-	else if($role == null)
+	if(!$role)
 	{
 		connectionFail("Compte invalide");
 		return "";
