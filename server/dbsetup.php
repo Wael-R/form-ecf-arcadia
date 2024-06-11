@@ -31,9 +31,9 @@ CREATE TABLE accounts (
 DROP TABLE IF EXISTS sessions;
 CREATE TABLE sessions (
 	sessionId INT AUTO_INCREMENT,
-	token BINARY(16) UNIQUE,
-	userId BINARY(16),
-	ipAddress VARCHAR(45),
+	token BINARY(16) NOT NULL UNIQUE,
+	userId BINARY(16) NOT NULL,
+	ipAddress VARCHAR(45) NOT NULL,
 	created DATETIME NOT NULL,
 	PRIMARY KEY (sessionId),
 	FOREIGN KEY (userId) REFERENCES accounts(userId) ON DELETE CASCADE
