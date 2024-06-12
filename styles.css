@@ -47,3 +47,16 @@ hr
 	width: 30em;
 	padding: 1em;
 }
+
+.login-message
+{
+	font-weight: 500;
+}
+
+/* * Admin page styles */
+
+.editor-card
+{
+	margin: auto;
+	padding: 1em;
+}

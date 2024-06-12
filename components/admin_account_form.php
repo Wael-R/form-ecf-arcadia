@@ -1,5 +1,8 @@
-<div class="card login-card">
+<h5 class="fw-bold">Créer un compte</h5>
 
+<br>
+
+<div class="card editor-card">
 	<form id="accountForm" action="javascript:void(0);">
 		<div class="mb-3">
 			<label for="email" class="form-label">Adresse Email</label>

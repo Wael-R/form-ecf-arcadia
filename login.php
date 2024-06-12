@@ -33,6 +33,10 @@ updateCSRFToken();
 					<input type="password" class="form-control" id="pass">
 				</div>
 
+				<div class="mb-3">
+					<p class="login-message" id="loginMessage"></p>
+				</div>
+
 				<button type="submit" class="btn btn-success">Connexion</button>
 			</form>
 		</div>
@@ -50,6 +54,8 @@ updateCSRFToken();
 				const auth = "admin/authLogin.php";
 				const target = "admin/index.php";
 
+				let loginMessage = document.getElementById("loginMessage");
+
 				let token = document.getElementById("token").value;
 				let email = document.getElementById("email").value;
 				let pass = document.getElementById("pass").value;
@@ -60,11 +66,11 @@ updateCSRFToken();
 					if(http.readyState == 4)
 					{
 						if(http.status == 401 || http.status == 403)
-							alert("Erreur: " + http.responseText);
+							loginMessage.innerHTML = "Erreur: " + http.responseText;
 						else if(http.status == 200)
 							window.location.href = target;
 						else
-							alert("Erreur inconnue"); // todo: show error messages below login button instead of alert
+							loginMessage.innerHTML = "Erreur inconnue (" + http.status + ")";
 					}
 				};
 
