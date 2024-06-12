@@ -7,6 +7,8 @@ if(php_sapi_name() != "cli")
 	exit();
 }
 
+require_once("./auth.php");
+
 echo("This will recreate all database tables and overwrite their data.\nType 'OK' to proceed...\n\n");
 
 if(readline() != "OK")
@@ -39,7 +41,14 @@ CREATE TABLE sessions (
 	FOREIGN KEY (userId) REFERENCES accounts(userId) ON DELETE CASCADE
 );
 
--- todo: add services
+DROP TABLE IF EXISTS services;
+CREATE TABLE services (
+	serviceId INT AUTO_INCREMENT,
+	name VARCHAR(100) NOT NULL UNIQUE,
+	description TEXT NOT NULL,
+	PRIMARY KEY (serviceId)
+);
+
 -- todo: add animals
 -- todo: add habitats
 -- todo: add reviews
@@ -89,22 +98,10 @@ if($stmt)
 	{
 		$email = readline("Enter a login email for the admin account: ");
 
-		$numAt = substr_count($email, "@");
-
-		if($numAt <= 0)
-			echo("\nEmail address must contain an @.\n");
-		else if($numAt > 1)
-			echo("\nEmail address may not contain multiple @ characters.\n");
+		if(isEmailAddress($email))
+			break;
 		else
-		{
-			$at = strpos($email, "@");
-			if($at <= 0)
-				echo("\nEmail address must contain at least one character before the @.\n");
-			else if($at >= strlen($email) - 1)
-				echo("\nEmail address must contain at least one character after the @.\n");
-			else
-				break;
-		}
+			echo("\nInvalid email address format\n");
 	}
 
 	$hash = "";

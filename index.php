@@ -1,3 +1,7 @@
+<?php
+require_once("./server/auth.php");
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -44,14 +48,28 @@
 			<h2><a class="text-success fw-bold" href="services.php">Services</a></h2>
 			<div class="container px-2">
 				<div class="row row-cols-1 row-cols-md-2 g-2 align-items-start justify-content-center">
-					<?php include("./components/svc_card.php"); ?>
-					<?php include("./components/svc_card.php"); ?>
-					<?php include("./components/svc_card.php"); ?>
-					<?php include("./components/svc_card.php"); ?>
+					<?php
+						$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
+
+						$res = $sqli->execute_query("SELECT serviceId, name, description FROM services ORDER BY serviceId ASC LIMIT 4;");
+						// todo? add a showcase picker to select which services to show in the home page
+
+						if($res)
+						{
+							while($service = $res->fetch_row())
+							{
+								$serviceTitle = $service[1];
+								$serviceDesc = substr($service[2], 0, 40);
+
+								if(strlen($service[2]) > 40)
+									$serviceDesc .= "...";
+
+								include("./components/svc_card.php");
+							}
+						}
+					?>
 				</div>
 			</div>
-			<!-- todo: (php) generate these cards instead of copy pasting -->
-			<!-- todo: (php) display list of services (max 4?) -->
 		</div>
 
 		<hr class="spacer">
