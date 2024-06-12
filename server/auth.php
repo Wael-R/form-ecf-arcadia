@@ -23,6 +23,37 @@ function connectionFail(string $message)
 	exit($message);
 }
 
+/** Returns true if the input string is a valid email address */
+function isEmailAddress(string $email): bool
+{
+	// must not contain any whitespace
+	if(str_contains($email, " ") || str_contains($email, "\t") || str_contains($email, "\n") || str_contains($email, "\r"))
+		return false;
+
+	$numAt = substr_count($email, "@");
+
+	// requires exactly one @
+	if($numAt <= 0 || $numAt > 1)
+		return false;
+
+	// must have at least one character before and after the @
+	$at = strpos($email, "@");
+	if($at <= 0 || $at >= strlen($email) - 1)
+		return false;
+
+	$domain = substr($email, $at + 1);
+
+	// email domain may not have more than one dot
+	if(substr_count($domain, ".") > 1)
+		return false;
+
+	// email domain must have a name before the dot
+	if($domain[0] == ".")
+		return false;
+
+	return true;
+}
+
 /** Returns true if the CSRF token sent in the Auth-Token header matches the currently set CSRF token */
 function checkCSRF(): bool
 {

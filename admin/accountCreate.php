@@ -23,6 +23,12 @@ if($role != "employee" && $role != "veterinarian")
 	exit("Role invalide");
 }
 
+if(!isEmailAddress($user))
+{
+	http_response_code(400);
+	exit("Adresse e-mail invalide");
+}
+
 $sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
 
 $res = $sqli->execute_query("SELECT BIN_TO_UUID(userId) as userId FROM accounts WHERE email = ?;", [$user]);
