@@ -1,5 +1,6 @@
 <?php
 require("./server/auth.php");
+updateCSRFToken();
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +21,7 @@ require("./server/auth.php");
 			<hr class="spacer">
 
 			<form id="loginForm" action="javascript:void(0);">
-				<input type="hidden" id="token" value="<?= $csrfToken ?? "" ?>">
+				<input type="hidden" id="token" value="<?= getCSRFToken() ?>">
 
 				<div class="mb-3">
 					<label for="email" class="form-label">Adresse Email</label>

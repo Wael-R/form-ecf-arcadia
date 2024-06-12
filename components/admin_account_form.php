@@ -1,7 +1,6 @@
 <div class="card login-card">
-	<form id="accountForm" action="javascript:void(0);">
-		<input type="hidden" id="token" value="<?= $csrfToken ?? "" ?>">
 
+	<form id="accountForm" action="javascript:void(0);">
 		<div class="mb-3">
 			<label for="email" class="form-label">Adresse Email</label>
 			<input type="email" class="form-control" id="email">
@@ -32,17 +31,17 @@
 </div>
 
 <script>
-	const form = document.getElementById("accountForm");
+	const accForm = document.getElementById("accountForm");
 
-	if(form)
+	if(accForm)
 	{
-		form.addEventListener("submit", (evt) =>
+		accForm.addEventListener("submit", (evt) =>
 		{
 			const target = "accountCreate.php";
 
-			let loginMessage = document.getElementById("loginMessage");
+			const token = "<?= getCSRFToken() ?>";
 
-			let token = document.getElementById("token").value;
+			let loginMessage = document.getElementById("loginMessage");
 
 			let emailField = document.getElementById("email");
 			let email = emailField.value;

@@ -2,6 +2,7 @@
 require_once("../server/auth.php");
 
 $role = authCheck();
+updateCSRFToken();
 ?>
 
 <!DOCTYPE html>

@@ -1,12 +1,20 @@
 <?php
-session_start();
+if(php_sapi_name() != "cli")
+	session_start();
 
 $config = json_decode(file_get_contents(__DIR__ . "/config.json"));
 
-if($_SERVER['REQUEST_METHOD'] != "POST")
+/** Generates a new CSRF token */
+function updateCSRFToken()
+{
 	$_SESSION["csrfToken"] = md5(uniqid(mt_rand(), true));
+}
 
-$csrfToken = $_SESSION["csrfToken"] ?? "";
+/** Returns the current CSRF token */
+function getCSRFToken()
+{
+	return $_SESSION["csrfToken"] ?? "";
+}
 
 /** Returns a 403 HTTP error alongside a custom message */
 function connectionFail(string $message)
@@ -18,12 +26,10 @@ function connectionFail(string $message)
 /** Returns true if the CSRF token sent in the Auth-Token header matches the currently set CSRF token */
 function checkCSRF(): bool
 {
-	global $csrfToken;
-
 	$heads = apache_request_headers();
 	$token = $heads["Auth-Token"];
 
-	if(!$token || $token != $csrfToken)
+	if(!$token || $token != getCSRFToken())
 		return false;
 
 	return true;
