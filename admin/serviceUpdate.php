@@ -9,7 +9,7 @@ if($role != "admin" && $role != "employee")
 if($_SERVER['REQUEST_METHOD'] != "POST" || !checkCSRF())
 {
 	http_response_code(405);
-	exit(getCSRFToken() . ", " . $_SESSION["csrfToken"] . ", " . apache_request_headers()["Auth-Token"] . ", " . strval(checkCSRF()) . ", " . $_SERVER['REQUEST_METHOD']);
+	exit();
 }
 
 $id = $_POST["id"];
