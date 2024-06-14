@@ -28,11 +28,15 @@
 
 		<?php if($formUseImages): ?>
 		<div class="mb-3">
-			<label for="<?= $formShortPrefix ?>Upload" class="form-label"><?= $formImageHeader ?></label>
+			<label class="form-label"><?= $formImageHeader ?></label>
 			<div class="editor-box">
 				<div id="<?= $formShortPrefix ?>Thumbs"><?= $formImageSelect ?></div>
 				<br>
-				<input type="file" id="<?= $formShortPrefix ?>Upload" class="form-control" disabled>
+				<label for="<?= $formShortPrefix ?>Upload" id="<?= $formShortPrefix ?>UploadButton" class="btn btn-success disabled">Ajouter...</label>
+				<input type="file" id="<?= $formShortPrefix ?>Upload" class="d-none" accept=".png,.jpg,.jpeg,.webp" disabled>
+				<div class="editor-progress progress d-none" id="<?= $formShortPrefix ?>Progress">
+					<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" id="<?= $formShortPrefix ?>ProgressBar" aria-valuemin="0" aria-valuemax="100"></div>
+				</div>
 			</div>
 		</div>
 		<?php endif; ?>
@@ -77,7 +81,15 @@
 
 	const <?= $formShortPrefix ?>TitleField = document.getElementById("<?= $formShortPrefix ?>Title");
 	const <?= $formShortPrefix ?>DescField = document.getElementById("<?= $formShortPrefix ?>Description");
+
+	<?php if($formUseImages): ?>
 	const <?= $formShortPrefix ?>UploadField = document.getElementById("<?= $formShortPrefix ?>Upload");
+	const <?= $formShortPrefix ?>UploadButton = document.getElementById("<?= $formShortPrefix ?>UploadButton");
+	const <?= $formShortPrefix ?>UploadList = document.getElementById("<?= $formShortPrefix ?>Thumbs");
+
+	const <?= $formShortPrefix ?>Progress = document.getElementById("<?= $formShortPrefix ?>Progress");
+	const <?= $formShortPrefix ?>ProgressBar = document.getElementById("<?= $formShortPrefix ?>ProgressBar");
+	<?php endif; ?>
 
 	if(<?= $formShortPrefix ?>Form)
 	{
@@ -153,6 +165,11 @@
 				<?= $formShortPrefix ?>ResetFields();
 
 				<?= $formShortPrefix ?>Delete.setAttribute("disabled", "");
+				<?php if($formUseImages): ?>
+				<?= $formShortPrefix ?>UploadList.innerHTML = "<?= $formImageSelect ?>";
+				<?= $formShortPrefix ?>UploadButton.classList.add("disabled");
+				<?= $formShortPrefix ?>UploadField.setAttribute("disabled", "");
+				<?php endif; ?>
 			}
 			else
 			{
@@ -164,27 +181,136 @@
 				<?= $formShortPrefix ?>DescField.value = <?= $formShortPrefix ?>List[idx].desc;
 
 				<?= $formShortPrefix ?>Delete.removeAttribute("disabled");
+				<?php if($formUseImages): ?>
+				<?= $formShortPrefix ?>UploadList.innerHTML = "";
+
+				<?= $formShortPrefix ?>List[idx].thumbs.forEach(thumb => {
+					let div = document.createElement("div");
+					div.classList.add("form-control", "d-flex", "justify-content-between", "align-items-center");
+
+					let link = document.createElement("a");
+					div.appendChild(link);
+
+					let dirs = thumb.src.split("/");
+
+					link.innerHTML = dirs[dirs.length - 1];
+					link.href = thumb.src;
+					link.target = "_blank";
+
+					let button = document.createElement("button");
+					button.classList.add("btn", "btn-danger");
+
+					button.innerHTML = "x";
+
+					div.appendChild(button);
+
+					<?= $formShortPrefix ?>UploadList.appendChild(div);
+				});
+
+				<?= $formShortPrefix ?>UploadButton.classList.remove("disabled");
+				<?= $formShortPrefix ?>UploadField.removeAttribute("disabled");
+				<?php endif; ?>
 			}
 		});
+
+		<?php if($formUseImages): ?>
+		<?= $formShortPrefix ?>UploadField.addEventListener("cancel", (evt) =>
+		{
+			const files = <?= $formShortPrefix ?>UploadField.files;
+
+			if(files.length > 0)
+				<?= $formShortPrefix ?>UploadField.dispatchEvent(new Event("change"));
+		});
+
+		<?= $formShortPrefix ?>UploadField.addEventListener("change", (evt) =>
+		{
+			const files = <?= $formShortPrefix ?>UploadField.files;
+
+			if(files.length > 0)
+			{
+				const target = "<?= $formUpdateTarget ?>";
+
+				const token = "<?= getCSRFToken() ?>";
+
+				let <?= $formPrefix ?>Message = document.getElementById("<?= $formPrefix ?>Message");
+				let index = <?= $formShortPrefix ?>Select.value;
+
+				let http = new XMLHttpRequest();
+
+				let data = new FormData();
+
+				if(index == "")
+					return;
+				else
+					data.append("id", <?= $formShortPrefix ?>List[index].id);
+
+				data.append("thumb", 1);
+				data.append("source", files[0]);
+
+				<?= $formShortPrefix ?>Select.setAttribute("disabled", "");
+				<?= $formShortPrefix ?>UploadButton.classList.add("disabled");
+				<?= $formShortPrefix ?>UploadField.setAttribute("disabled", "");
+
+				<?= $formShortPrefix ?>Progress.classList.remove("d-none");
+
+				http.onreadystatechange = (ev) => {
+					if(http.readyState == 4)
+					{
+						<?= $formShortPrefix ?>Select.removeAttribute("disabled");
+						<?= $formShortPrefix ?>UploadButton.classList.remove("disabled");
+						<?= $formShortPrefix ?>UploadField.removeAttribute("disabled");
+						<?= $formShortPrefix ?>Progress.classList.add("d-none");
+
+						if(http.status == 400 || http.status == 401 || http.status == 403)
+							<?= $formPrefix ?>Message.innerHTML = "Erreur: " + http.responseText;
+						else if(http.status == 200)
+							<?= $formPrefix ?>Message.innerHTML = "<?= $formImageSuccess ?>";
+						else
+							<?= $formPrefix ?>Message.innerHTML = "Erreur inconnue (" + http.status + ")";
+					}
+				};
+
+				http.upload.onprogress = (ev) => {
+					if(ev.lengthComputable)
+					{
+						perc = (ev.loaded / ev.total) * 100;
+						<?= $formShortPrefix ?>ProgressBar.style.width = `${perc}%`;
+						<?= $formShortPrefix ?>ProgressBar.setAttribute("aria-valuenow", Math.round(perc));
+					}
+					else
+					{
+						<?= $formShortPrefix ?>ProgressBar.style.width = "100%";
+						<?= $formShortPrefix ?>ProgressBar.setAttribute("aria-valuenow", "100");
+					}
+				}
+
+				http.open("POST", target);
+				http.setRequestHeader("Auth-Token", token);
+
+				http.send(data);
+			}
+			// else
+			// 	console.log("cleared"); // canceled after selecting
+		});
+		<?php endif; ?>
 
 		<?= $formShortPrefix ?>DeleteConfirm.addEventListener("click", (evt) =>
 		{
 			const target = "<?= $formUpdateTarget ?>";
-			
+
 			const token = "<?= getCSRFToken() ?>";
 
 			let <?= $formPrefix ?>Message = document.getElementById("<?= $formPrefix ?>Message");
-			let serviceIdx = <?= $formShortPrefix ?>Select.value;
+			let index = <?= $formShortPrefix ?>Select.value;
 
 			let http = new XMLHttpRequest();
 
 			let data = new FormData();
-			let updating = false;
 
-			if(serviceIdx == "")
+			if(index == "")
 				return;
 			else
-				data.append("id", <?= $formShortPrefix ?>List[serviceIdx].id);
+				data.append("id", <?= $formShortPrefix ?>List[index].id);
 
 			data.append("delete", "1");
 

@@ -68,6 +68,8 @@ updateCSRFToken();
 				$formUseImages = false; // enables the image upload feature
 				$formImageHeader = ""; // image upload header text
 				$formImageSelect = ""; // "select an entry" message
+				$formImageSuccess = ""; // message for uploading an image
+				$formImageDelete = ""; // message for deleting an image
 
 				$formPrefix = "service"; // form id prefix
 				$formShortPrefix = "svc"; // form code name
@@ -105,6 +107,8 @@ updateCSRFToken();
 				$formUseImages = true;
 				$formImageHeader = "Image(s) de l'habitat";
 				$formImageSelect = "Veuillez selectionner un habitat pour modifier les images";
+				$formImageSuccess = "Image ajoutée avec succès";
+				$formImageDelete = "Image supprimée avec succès";
 
 				$formPrefix = "habitat";
 				$formShortPrefix = "hab";

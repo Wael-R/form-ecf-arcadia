@@ -77,10 +77,39 @@ require_once("./server/auth.php");
 		<div class="main-row habitats px-2 px-sm-5">
 			<h2><a class="text-success fw-bold" href="habitats.php">Habitats</a></h2>
 			<div class="row row-cols-1 row-cols-md-2 g-2 align-items-start justify-content-center">
-				<?php include("./components/other_card.php"); ?>
-				<?php include("./components/other_card.php"); ?>
-				<?php include("./components/other_card.php"); ?>
-				<?php include("./components/other_card.php"); ?>
+					<?php
+						$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
+
+						$res = $sqli->execute_query("SELECT habitatId, name, description FROM habitats ORDER BY habitatId ASC LIMIT 4;");
+
+						if($res)
+						{
+							while($habitat = $res->fetch_row())
+							{
+								$cardTitle = $habitat[1];
+								$cardButton = "Voir plus";
+								$cardLink = "#todo";
+								$cardDesc = substr($habitat[2], 0, 40);
+
+								if(strlen($habitat[2]) > 40)
+									$cardDesc .= "...";
+
+								$res2 = $sqli->execute_query("SELECT source FROM habitatThumbnails WHERE habitat = ? ORDER BY habitatThumbId ASC LIMIT 1;", [$habitat[0]]);
+
+								$cardThumb = "";
+
+								if($res2)
+								{
+									$thumb = $res2->fetch_row();
+
+									if($thumb)
+										$cardThumb = $thumb[0];
+								}
+
+								include("./components/other_card.php");
+							}
+						}
+					?>
 			</div>
 			<!-- todo: (php) display list of habitats (max 4?) -->
 		</div>
