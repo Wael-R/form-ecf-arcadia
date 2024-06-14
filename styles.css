@@ -39,6 +39,14 @@ hr
 	z-index: 2; /* fsr carousels have a z index of 1 */
 }
 
+.anchor
+{
+	display: block;
+	position: relative;
+	top: -5rem;
+	visibility: hidden;
+}
+
 /* * Login page styles */
 
 .login-card
@@ -59,4 +67,11 @@ hr
 {
 	margin: auto;
 	padding: 1em;
+}
+
+.editor-box
+{
+	padding: 0.5em;
+	border: var(--bs-border-width) solid var(--bs-border-color);
+	border-radius: var(--bs-border-radius);
 }

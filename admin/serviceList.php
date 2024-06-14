@@ -22,9 +22,15 @@ if(!$res)
 	exit("Erreur inconnue (1," . $sqli->errno . ")");
 }
 
+$svcs = [];
+
 while($svc = $res->fetch_row())
 {
-	$title = htmlspecialchars(str_replace("\t", "", $svc[1]));
-	$description = htmlspecialchars(str_replace("\t", "", $svc[2]));
-	echo("$svc[0]\t$title\t$description\t\n");
+	$id = $svc[0];
+	$title = $svc[1];
+	$desc = $svc[2];
+
+	$svcs[] = ["id" => $id, "title" => $title, "desc" => $desc, "thumbs" => []];
 }
+
+echo(json_encode($svcs));

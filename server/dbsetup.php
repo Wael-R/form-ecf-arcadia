@@ -49,8 +49,42 @@ CREATE TABLE services (
 	PRIMARY KEY (serviceId)
 );
 
--- todo: add animals
--- todo: add habitats
+DROP TABLE IF EXISTS habitats;
+CREATE TABLE habitats (
+	habitatId INT AUTO_INCREMENT,
+	name VARCHAR(100) NOT NULL UNIQUE,
+	description TEXT NOT NULL,
+	PRIMARY KEY (habitatId)
+);
+
+DROP TABLE IF EXISTS habitatThumbnails;
+CREATE TABLE habitatThumbnails (
+	habitatThumbId INT AUTO_INCREMENT,
+	habitat INT NOT NULL,
+	source VARCHAR(255) NOT NULL,
+	PRIMARY KEY (habitatThumbId),
+	FOREIGN KEY (habitat) REFERENCES habitats(habitatId) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS animals;
+CREATE TABLE animals (
+	animalId INT AUTO_INCREMENT,
+	name VARCHAR(100) NOT NULL UNIQUE,
+	race VARCHAR(100) NOT NULL,
+	habitat INT NOT NULL,
+	PRIMARY KEY (animalId),
+	FOREIGN KEY (habitat) REFERENCES habitats(habitatId) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS animalThumbnails;
+CREATE TABLE animalThumbnails (
+	animalThumbId INT AUTO_INCREMENT,
+	animal INT NOT NULL,
+	source VARCHAR(255) NOT NULL,
+	PRIMARY KEY (animalThumbId),
+	FOREIGN KEY (animal) REFERENCES animals(animalId) ON DELETE CASCADE
+);
+
 -- todo: add reviews
 ";
 

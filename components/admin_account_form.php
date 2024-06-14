@@ -1,3 +1,4 @@
+<a class="anchor" id="accountEditor"></a>
 <h5 class="fw-bold">Créer un compte</h5>
 
 <br>
