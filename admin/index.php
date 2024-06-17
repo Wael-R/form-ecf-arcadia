@@ -243,7 +243,7 @@ updateCSRFToken();
 
 						let data = new FormData();
 
-						if(index == "")
+						if(index === "")
 							return;
 						else
 							data.append("id", entries[index].id);
@@ -310,7 +310,7 @@ updateCSRFToken();
 
 				let data = new FormData();
 
-				if(index == "")
+				if(index === "")
 					return;
 				else
 					data.append("id", entries[index].id);
@@ -363,7 +363,7 @@ updateCSRFToken();
 				let data = new FormData();
 				let updating = false;
 
-				if(index == "")
+				if(index === "")
 					data.append("id", 0);
 				else
 				{
@@ -432,7 +432,8 @@ updateCSRFToken();
 				{
 					echo("<a class=\"text-success fw-bold\" href=\"#accountEditor\">Comptes</a> - ");
 					echo("<a class=\"text-success fw-bold\" href=\"#serviceEditor\">Services</a> - ");
-					echo("<a class=\"text-success fw-bold\" href=\"#habitatEditor\">Habitats</a>\n");
+					echo("<a class=\"text-success fw-bold\" href=\"#habitatEditor\">Habitats</a> - ");
+					echo("<a class=\"text-success fw-bold\" href=\"#animalEditor\">Animaux</a>\n");
 				}
 				else if($role == "employee")
 				{
@@ -465,6 +466,10 @@ updateCSRFToken();
 				echo($spacer);
 
 				include("../components/admin_habitat_form.php");
+
+				echo($spacer);
+
+				include("../components/admin_animal_form.php");
 			}
 			else if($role == "employee")
 			{
