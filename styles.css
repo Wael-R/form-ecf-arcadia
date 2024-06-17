@@ -28,6 +28,14 @@ body
 	height: 200px;
 }
 
+.main-card-line
+{
+	width: 100%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
 .spacer
 {
 	margin: 2rem 0;

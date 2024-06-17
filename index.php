@@ -1,5 +1,7 @@
 <?php
 require_once("./server/auth.php");
+
+$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
 ?>
 
 <!DOCTYPE html>
@@ -49,8 +51,6 @@ require_once("./server/auth.php");
 			<div class="container px-2">
 				<div class="row row-cols-1 row-cols-md-2 g-2 align-items-start justify-content-center">
 					<?php
-						$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
-
 						$res = $sqli->execute_query("SELECT serviceId, name, description FROM services ORDER BY serviceId ASC LIMIT 4;");
 						// todo? add a showcase picker to select which services to show in the home page
 
@@ -59,10 +59,7 @@ require_once("./server/auth.php");
 							while($service = $res->fetch_row())
 							{
 								$serviceTitle = $service[1];
-								$serviceDesc = substr($service[2], 0, 40);
-
-								if(strlen($service[2]) > 40)
-									$serviceDesc .= "...";
+								$serviceDesc = $service[2];
 
 								include("./components/svc_card.php");
 							}
@@ -77,41 +74,35 @@ require_once("./server/auth.php");
 		<div class="main-row habitats px-2 px-sm-5">
 			<h2><a class="text-success fw-bold" href="habitats.php">Habitats</a></h2>
 			<div class="row row-cols-1 row-cols-md-2 g-2 align-items-start justify-content-center">
-					<?php
-						$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
+				<?php
+					$res = $sqli->execute_query("SELECT habitatId, name, description FROM habitats ORDER BY habitatId ASC LIMIT 4;");
 
-						$res = $sqli->execute_query("SELECT habitatId, name, description FROM habitats ORDER BY habitatId ASC LIMIT 4;");
-
-						if($res)
+					if($res)
+					{
+						while($habitat = $res->fetch_row())
 						{
-							while($habitat = $res->fetch_row())
+							$cardTitle = $habitat[1];
+							$cardButton = "Voir plus";
+							$cardLink = "#todo";
+							$cardDesc = $habitat[2];
+
+							$res2 = $sqli->execute_query("SELECT source FROM habitatThumbnails WHERE habitat = ? ORDER BY habitatThumbId ASC LIMIT 1;", [$habitat[0]]);
+
+							$cardThumb = "";
+
+							if($res2)
 							{
-								$cardTitle = $habitat[1];
-								$cardButton = "Voir plus";
-								$cardLink = "#todo";
-								$cardDesc = substr($habitat[2], 0, 40);
+								$thumb = $res2->fetch_row();
 
-								if(strlen($habitat[2]) > 40)
-									$cardDesc .= "...";
-
-								$res2 = $sqli->execute_query("SELECT source FROM habitatThumbnails WHERE habitat = ? ORDER BY habitatThumbId ASC LIMIT 1;", [$habitat[0]]);
-
-								$cardThumb = "";
-
-								if($res2)
-								{
-									$thumb = $res2->fetch_row();
-
-									if($thumb)
-										$cardThumb = $thumb[0];
-								}
-
-								include("./components/other_card.php");
+								if($thumb)
+									$cardThumb = $thumb[0];
 							}
+
+							include("./components/other_card.php");
 						}
-					?>
+					}
+				?>
 			</div>
-			<!-- todo: (php) display list of habitats (max 4?) -->
 		</div>
 
 		<hr class="spacer">
@@ -119,15 +110,37 @@ require_once("./server/auth.php");
 		<div class="main-row animals px-2 px-sm-5">
 			<h2><a class="text-success fw-bold" href="animals.php">Animaux</a></h2>
 			<div class="row row-cols-1 row-cols-md-2 g-2 align-items-start justify-content-center">
-				<?php include("./components/other_card.php"); ?>
-				<?php include("./components/other_card.php"); ?>
-				<?php include("./components/other_card.php"); ?>
-				<?php include("./components/other_card.php"); ?>
+				<?php
+					$res = $sqli->execute_query("SELECT animalId, name, race FROM animals ORDER BY animalId ASC LIMIT 4;");
+
+					if($res)
+					{
+						while($animal = $res->fetch_row())
+						{
+							$cardTitle = $animal[1];
+							$cardButton = "Voir plus";
+							$cardLink = "#todo";
+							$cardDesc = $animal[2];
+
+							$res2 = $sqli->execute_query("SELECT source FROM animalThumbnails WHERE animal = ? ORDER BY animalThumbId ASC LIMIT 1;", [$animal[0]]);
+
+							$cardThumb = "";
+
+							if($res2)
+							{
+								$thumb = $res2->fetch_row();
+
+								if($thumb)
+									$cardThumb = $thumb[0];
+							}
+
+							include("./components/other_card.php");
+						}
+					}
+				?>
 			</div>
-			<!-- todo: (php) display list of animals (max 4?) -->
 			<!-- todo? show only the most popular animals -->
 		</div>
-		<!-- * for each of the above, the header should link over to the full corresponding list page -->
 
 		<hr class="spacer">
 	
