@@ -11,6 +11,360 @@ updateCSRFToken();
 	<?php $title = "Admin"; include("../components/head.php"); ?>
 </head>
 <body>
+	<script>
+
+		function formGenerateSelectOptions(props)
+		{
+			const {entries, select, listTarget: target, listErrorMsg, listUnknownErrorMsg, submitBtn, deleteBtn, messageField} = props;
+			const {useImages, imageUploadBtn, imageUploadField} = props;
+
+			let old = select.value;
+
+			select.setAttribute("disabled", "");
+			submitBtn.setAttribute("disabled", "");
+			deleteBtn.setAttribute("disabled", "");
+
+			if(useImages)
+			{
+				imageUploadBtn.classList.add("disabled");
+				imageUploadField.setAttribute("disabled", "");
+			}
+
+			let request = new XMLHttpRequest();
+
+			request.onreadystatechange = (evt) => {
+				if(request.readyState == 4)
+				{
+					if(request.status == 400 || request.status == 401 || request.status == 403)
+						messageField.innerHTML = listErrorMsg + " : " + request.responseText;
+					else if(request.status == 200)
+					{
+						select.options.length = 1;
+
+						entries.length = 0;
+
+						let data = JSON.parse(request.responseText);
+
+						data.forEach(entry => {
+							entries.push(entry);
+
+							let option = document.createElement("option");
+
+							option.setAttribute("value", entries.length - 1);
+							option.innerHTML = entry.title;
+
+							select.options.length++;
+							select.options[select.options.length - 1] = option;
+						});
+
+						select.removeAttribute("disabled");
+						submitBtn.removeAttribute("disabled");
+
+						if(useImages)
+						{
+							imageUploadBtn.classList.remove("disabled");
+							imageUploadField.removeAttribute("disabled");
+						}
+
+						select.value = old;
+
+						if(select.value == "")
+							select.value = ""; // not resetting this causes out of bounds values to be blank
+
+						formUpdateFields(props);
+					}
+					else
+					{
+						messageField.innerHTML = listUnknownErrorMsg + " (" + request.status + ")";
+						console.error("Unknown error while fetching entries: " + request.statusText);
+					}
+				}
+			};
+
+			request.open("GET", target);
+			request.send();
+		}
+
+		function formResetFields(props)
+		{
+			const {select, titleInput, titleDefault, descInput, descDefault, submitBtn, submitNew, deleteBtn} = props;
+			const {useImages, imageUploadList, imageUploadBtn, imageUploadField, imageSelectMsg} = props;
+
+			select.value = "";
+			submitBtn.innerHTML = submitNew;
+			titleInput.value = titleDefault;
+			descInput.value = descDefault;
+			deleteBtn.setAttribute("disabled", "");
+
+			if(useImages)
+			{
+				imageUploadList.innerHTML = imageSelectMsg;
+				imageUploadBtn.classList.add("disabled");
+				imageUploadField.setAttribute("disabled", "");
+			}
+		}
+
+		function formUpdateFields(props)
+		{
+			const {entries, select, submitTarget: target, titleInput, descInput, submitBtn, submitUpdate, deleteBtn, messageField} = props;
+			const {useImages, imageUploadList, imageUploadBtn, imageUploadField} = props;
+
+			if(select.value == "")
+				formResetFields(props);
+			else
+			{
+				let idx = parseInt(select.value);
+
+				submitBtn.innerHTML = submitUpdate;
+
+				titleInput.value = entries[idx].title;
+				descInput.value = entries[idx].desc;
+
+				deleteBtn.removeAttribute("disabled");
+
+				if(useImages)
+				{
+					imageUploadList.innerHTML = "";
+
+					entries[idx].thumbs.forEach(thumb => {
+						let div = document.createElement("div");
+						div.classList.add("form-control", "d-flex", "justify-content-between", "align-items-center");
+
+						let link = document.createElement("a");
+						div.appendChild(link);
+
+						let dirs = thumb.src.split("/");
+
+						link.innerHTML = dirs[dirs.length - 1];
+						link.href = thumb.src;
+						link.target = "_blank";
+
+						let button = document.createElement("button");
+						button.classList.add("btn", "btn-danger");
+
+						button.innerHTML = "x";
+
+					if(entries[idx].thumbs.length <= 0)
+						imageUploadList.innerHTML = "Aucune image";
+
+					imageUploadBtn.classList.remove("disabled");
+					imageUploadField.removeAttribute("disabled");
+				}
+			}
+		}
+
+		function formSetup(props)
+		{
+			const {form, entries, select, submitTarget: target, titleInput, descInput, messageField} = props;
+			const {submitBtn, submitNewSuccessMsg, submitUpdateSuccessMsg, deleteBtn, deleteConfirmBtn, deleteSuccessMsg} = props;
+			const {useImages, imageUploadList, imageUploadBtn, imageUploadField, imageProgress, imageProgressBar} = props;
+
+			formGenerateSelectOptions(props);
+			formResetFields(props);
+
+			select.addEventListener("change", (evt) =>
+			{
+				messageField.innerHTML = "";
+				formUpdateFields(props);
+			});
+
+			if(useImages)
+			{
+				imageUploadField.addEventListener("cancel", (evt) =>
+				{
+					const files = imageUploadField.files;
+
+					if(files.length > 0)
+						imageUploadField.dispatchEvent(new Event("change"));
+				});
+
+				imageUploadField.addEventListener("change", (evt) =>
+				{
+					const files = imageUploadField.files;
+
+					if(files.length > 0)
+					{
+						let index = select.value;
+
+						let request = new XMLHttpRequest();
+
+						let data = new FormData();
+
+						if(index == "")
+							return;
+						else
+							data.append("id", entries[index].id);
+
+						data.append("thumb", 1);
+						data.append("source", files[0]);
+
+						select.setAttribute("disabled", "");
+						imageUploadBtn.classList.add("disabled");
+						imageUploadField.setAttribute("disabled", "");
+
+						imageProgress.classList.remove("d-none");
+
+						request.onreadystatechange = (evt) => {
+							if(request.readyState == 4)
+							{
+								select.removeAttribute("disabled");
+								imageUploadBtn.classList.remove("disabled");
+								imageUploadField.removeAttribute("disabled");
+								imageProgress.classList.add("d-none");
+
+								if(request.status == 400 || request.status == 401 || request.status == 403)
+									messageField.innerHTML = "Erreur: " + request.responseText;
+								else if(request.status == 200)
+								{
+									messageField.innerHTML = "Image ajoutée avec succès";
+									formGenerateSelectOptions(props);
+								}
+								else
+								{
+									messageField.innerHTML = "Erreur inconnue (" + request.status + ")";
+									console.error("Unknown error while uploading images: " + request.statusText);
+								}
+							}
+						};
+
+						request.upload.onprogress = (evt) => {
+							if(evt.lengthComputable)
+							{
+								perc = (evt.loaded / evt.total) * 100;
+								imageProgressBar.style.width = `${perc}%`;
+								imageProgressBar.setAttribute("aria-valuenow", Math.round(perc));
+							}
+							else
+							{
+								imageProgressBar.style.width = "100%";
+								imageProgressBar.setAttribute("aria-valuenow", "100");
+							}
+						}
+
+						request.open("POST", target);
+						request.setRequestHeader("Auth-Token", "<?= getCSRFToken() ?>");
+
+						request.send(data);
+					}
+				});
+			}
+
+			deleteConfirmBtn.addEventListener("click", (evt) =>
+			{
+				let index = select.value;
+
+				let request = new XMLHttpRequest();
+
+				let data = new FormData();
+
+				if(index == "")
+					return;
+				else
+					data.append("id", entries[index].id);
+
+				data.append("delete", "1");
+
+				submitBtn.setAttribute("disabled", "");
+				deleteBtn.setAttribute("disabled", "");
+
+				request.onreadystatechange = (ev) => {
+					if(request.readyState == 4)
+					{
+						submitBtn.removeAttribute("disabled");
+
+						if(request.status == 400 || request.status == 401 || request.status == 403)
+						{
+							deleteBtn.removeAttribute("disabled");
+							messageField.innerHTML = "Erreur: " + request.responseText;
+						}
+						else if(request.status == 200)
+						{
+							messageField.innerHTML = deleteSuccessMsg;
+
+							formGenerateSelectOptions(props);
+						}
+						else
+						{
+							deleteBtn.removeAttribute("disabled");
+							messageField.innerHTML = "Erreur inconnue (" + request.status + ")";
+							console.error("Unknown error while deleting an entry: " + request.statusText);
+						}
+					}
+				};
+
+				request.open("POST", target);
+				request.setRequestHeader("Auth-Token", "<?= getCSRFToken() ?>");
+
+				request.send(data);
+			});
+
+			form.addEventListener("submit", (evt) =>
+			{
+				let index = select.value;
+
+				let title = titleInput.value;
+				let desc = descInput.value;
+
+				let request = new XMLHttpRequest();
+
+				let data = new FormData();
+				let updating = false;
+
+				if(index == "")
+					data.append("id", 0);
+				else
+				{
+					data.append("id", entries[index].id);
+					updating = true;
+				}
+
+				data.append("title", title);
+				data.append("description", desc);
+
+				submitBtn.setAttribute("disabled", "");
+
+				if(updating)
+					deleteBtn.setAttribute("disabled", "");
+
+				request.onreadystatechange = (ev) => {
+					if(request.readyState == 4)
+					{
+						submitBtn.removeAttribute("disabled");
+
+						if(request.status == 400 || request.status == 401 || request.status == 403)
+						{
+							if(updating)
+								deleteBtn.removeAttribute("disabled");
+
+							messageField.innerHTML = "Erreur: " + request.responseText;
+						}
+						else if(request.status == 200)
+						{
+							if(updating)
+								messageField.innerHTML = submitUpdateSuccessMsg;
+							else
+								messageField.innerHTML = submitNewSuccessMsg;
+
+							formGenerateSelectOptions(props);
+						}
+						else
+						{
+							if(updating)
+								deleteBtn.removeAttribute("disabled");
+
+							messageField.innerHTML = "Erreur inconnue (" + request.status + ")";
+							console.error("Unknown error while updating an entry: " + request.statusText);
+						}
+					}
+				};
+
+				request.open("POST", target);
+				request.setRequestHeader("Auth-Token", "<?= getCSRFToken() ?>");
+
+				request.send(data);
+			});
+		}
+	</script>
 	<div class="main-container">
 		<?php include("../components/navbar.php"); ?>
 
@@ -47,95 +401,17 @@ updateCSRFToken();
 			<?php
 			$spacer = "\n</div><hr class=\"spacer\"><div class=\"main-row px-2 px-sm-5\">\n";
 
-			function serviceForm()
-			{
-				$formTitle = "Modifier les services"; // form header title
-				$formSelectLabel = "Service à modifier ou créer"; // label text for the select dropdown
-				$formSelectEntry = "Créer un nouveau service..."; // text for the select dropdown's create option
-
-				$formNameHeader = "Nom du service"; // label text for the name box
-				$formName = "Nouveau Service"; // default name value
-
-				$formDescHeader = "Description du service"; // label text for the description box
-				$formDesc = "Description..."; // default description value
-				$formDescMultiline = true; // turns the description input into a text area instead of a single line text box
-
-				$formCreate = "Créer un nouveau service"; // create button text
-				$formUpdate = "Mettre à jour le service"; // update button text
-				$formDelete = "Supprimer le service"; // delete button text
-				$formDeletePrompt = "Etes vous sûr de vouloir supprimer ce service?"; // delete confirmation modal text
-
-				$formUseImages = false; // enables the image upload feature
-				$formImageHeader = ""; // image upload header text
-				$formImageSelect = ""; // "select an entry" message
-				$formImageSuccess = ""; // message for uploading an image
-				$formImageDelete = ""; // message for deleting an image
-
-				$formPrefix = "service"; // form id prefix
-				$formShortPrefix = "svc"; // form code name
-
-				$formListTarget = "serviceList.php"; // api link to query for entry list
-				$formListError = "Erreur lors du chargement des services"; // error message when a known error occurs while loading
-				$formListUnknownError = "Erreur inconnue lors du chargement des services"; // error message when an unknown error occurs while loading
-
-				$formUpdateTarget = "serviceUpdate.php"; // api link to query to update entries
-				$formUpdateSuccess = "Service mis à jour avec succès"; // message for updating an entry
-				$formCreateSuccess = "Service crée avec succès"; // message for creating an entry
-				$formDeleteSuccess = "Service supprimé avec succès"; // message for deleting an entry
-
-				include("../components/admin_generic_form.php");
-			}
-
-			function habitatForm()
-			{
-				$formTitle = "Modifier les habitats";
-				$formSelectLabel = "Habitat à modifier ou créer";
-				$formSelectEntry = "Créer un nouvel habitat...";
-
-				$formNameHeader = "Nom de l'habitat";
-				$formName = "Nouvel Habitat";
-
-				$formDescHeader = "Description de l'habitat";
-				$formDesc = "Description...";
-				$formDescMultiline = true;
-
-				$formCreate = "Créer un nouvel habitat";
-				$formUpdate = "Mettre à jour l'habitat";
-				$formDelete = "Supprimer l'habitat";
-				$formDeletePrompt = "Etes vous sûr de vouloir supprimer cet habitat?";
-
-				$formUseImages = true;
-				$formImageHeader = "Image(s) de l'habitat";
-				$formImageSelect = "Veuillez selectionner un habitat pour modifier les images";
-				$formImageSuccess = "Image ajoutée avec succès";
-				$formImageDelete = "Image supprimée avec succès";
-
-				$formPrefix = "habitat";
-				$formShortPrefix = "hab";
-
-				$formListTarget = "habitatList.php";
-				$formListError = "Erreur lors du chargement des habitats";
-				$formListUnknownError = "Erreur inconnue lors du chargement des habitats";
-
-				$formUpdateTarget = "habitatUpdate.php";
-				$formUpdateSuccess = "Habitat mis à jour avec succès";
-				$formCreateSuccess = "Habitat crée avec succès";
-				$formDeleteSuccess = "Habitat supprimé avec succès";
-
-				include("../components/admin_generic_form.php");
-			}
-
 			if($role == "admin")
 			{
 				include("../components/admin_account_form.php");
 
 				echo($spacer);
 
-				serviceForm();
+				include("../components/admin_service_form.php");
 
 				echo($spacer);
 
-				habitatForm();
+				include("../components/admin_habitat_form.php");
 			}
 			else if($role == "employee")
 			{
