@@ -113,12 +113,12 @@ updateCSRFToken();
 				formResetFields(props);
 			else
 			{
-				let idx = parseInt(select.value);
+				let index = parseInt(select.value);
 
 				submitBtn.innerHTML = submitUpdate;
 
-				titleInput.value = entries[idx].title;
-				descInput.value = entries[idx].desc;
+				titleInput.value = entries[index].title;
+				descInput.value = entries[index].desc;
 
 				deleteBtn.removeAttribute("disabled");
 
@@ -126,7 +126,7 @@ updateCSRFToken();
 				{
 					imageUploadList.innerHTML = "";
 
-					entries[idx].thumbs.forEach(thumb => {
+					entries[index].thumbs.forEach((thumb) => {
 						let div = document.createElement("div");
 						div.classList.add("form-control", "d-flex", "justify-content-between", "align-items-center");
 
@@ -144,7 +144,60 @@ updateCSRFToken();
 
 						button.innerHTML = "x";
 
-					if(entries[idx].thumbs.length <= 0)
+						button.addEventListener("click", (evt) => {
+							evt.preventDefault();
+
+							let request = new XMLHttpRequest();
+
+							let data = new FormData();
+
+							if(index === "")
+								return;
+							else
+								data.append("id", entries[index].id);
+
+							data.append("thumb", 1);
+							data.append("thumbId", thumb.id);
+							data.append("delete", 1);
+
+							select.setAttribute("disabled", "");
+							imageUploadBtn.classList.add("disabled");
+							imageUploadField.setAttribute("disabled", "");
+
+							request.onreadystatechange = (evt) => {
+								if(request.readyState == 4)
+								{
+									select.removeAttribute("disabled");
+									imageUploadBtn.classList.remove("disabled");
+									imageUploadField.removeAttribute("disabled");
+
+									if(request.status == 400 || request.status == 401 || request.status == 403)
+										messageField.innerHTML = "Erreur: " + request.responseText;
+									else if(request.status == 200)
+									{
+										messageField.innerHTML = "Image supprimée avec succès";
+										formGenerateSelectOptions(props);
+									}
+									else
+									{
+										messageField.innerHTML = "Erreur inconnue (" + request.status + ")";
+										console.error("Unknown error while deleting images: " + request.statusText);
+									}
+								}
+							};
+
+							request.open("POST", target);
+							request.setRequestHeader("Auth-Token", "<?= getCSRFToken() ?>");
+
+							request.send(data);
+						});
+
+						div.appendChild(button);
+
+						imageUploadList.appendChild(div);
+					});
+
+					if(entries[index].thumbs.length <= 0)
 						imageUploadList.innerHTML = "Aucune image";
 
 					imageUploadBtn.classList.remove("disabled");
