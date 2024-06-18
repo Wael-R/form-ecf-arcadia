@@ -35,6 +35,11 @@ if($delete == "" && $thumb == "")
 		exit("Description invalide");
 	}
 }
+else if($id == 0)
+{
+	http_response_code(400);
+	exit("Habitat invalide");
+}
 
 if($id == 0) // create
 {

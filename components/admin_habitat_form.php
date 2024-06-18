@@ -15,6 +15,9 @@
 	$formUseImages = true; // shows the image upload form
 	$formImageLabel = "Image(s) de l'habitat"; // image upload header text
 
+	$formUseAltButton = false; // adds an extra button next to the submit button
+	$formAltButtonText = ""; // text for the extra button
+
 	$formPrefix = "habitat"; // form id prefix
 
 	include("../components/admin_generic_form.php");

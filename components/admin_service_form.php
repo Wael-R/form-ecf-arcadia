@@ -15,6 +15,9 @@
 	$formUseImages = false; // shows the image upload form
 	$formImageLabel = ""; // image upload header text
 
+	$formUseAltButton = false; // adds an extra button next to the submit button
+	$formAltButtonText = ""; // text for the extra button
+
 	$formPrefix = "service"; // form id prefix
 
 	include("../components/admin_generic_form.php");

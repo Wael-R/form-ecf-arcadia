@@ -18,10 +18,11 @@ $race = $_POST["description"] ?? "";
 $delete = $_POST["delete"] ?? "";
 $thumb = $_POST["thumb"] ?? "";
 $thumbId = $_POST["thumbId"] ?? "";
+$habitat = $_POST["habitat"] ?? "";
 
 $sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
 
-if($delete == "" && $thumb == "")
+if($delete == "" && $thumb == "" && $habitat == "")
 {
 	if(strlen($title) < 1)
 	{
@@ -34,6 +35,11 @@ if($delete == "" && $thumb == "")
 		http_response_code(400);
 		exit("Race invalide");
 	}
+}
+else if($id == 0)
+{
+	http_response_code(400);
+	exit("Animal invalide");
 }
 
 if($id == 0) // create
@@ -165,6 +171,16 @@ else
 				move_uploaded_file($path, dirname(__DIR__) . $final);
 			}
 		}
+		else if($habitat != "")
+		{
+			$res = $sqli->execute_query("UPDATE animals SET habitat = ? WHERE animalId = ?;", [$habitat, $id]);
+
+			if(!$res)
+			{
+				http_response_code(400);
+				exit("Erreur inconnue (8," . $sqli->errno . ")");
+			}
+		}
 		else
 		{
 			$res = $sqli->execute_query("UPDATE animals SET name = ?, race = ? WHERE animalId = ?;", [$title, $race, $id]);
@@ -172,7 +188,7 @@ else
 			if(!$res)
 			{
 				http_response_code(400);
-				exit("Erreur inconnue (8," . $sqli->errno . ")");
+				exit("Erreur inconnue (9," . $sqli->errno . ")");
 			}
 		}
 	}

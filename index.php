@@ -111,7 +111,7 @@ $sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql-
 			<h2><a class="text-success fw-bold" href="animals.php">Animaux</a></h2>
 			<div class="row row-cols-1 row-cols-md-2 g-2 align-items-start justify-content-center">
 				<?php
-					$res = $sqli->execute_query("SELECT animalId, name, race FROM animals ORDER BY animalId ASC LIMIT 4;");
+					$res = $sqli->execute_query("SELECT animalId, name, race FROM animals WHERE habitat != 0 ORDER BY animalId ASC LIMIT 4;");
 
 					if($res)
 					{

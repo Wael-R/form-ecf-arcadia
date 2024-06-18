@@ -15,7 +15,7 @@ updateCSRFToken();
 
 		function formGenerateSelectOptions(props)
 		{
-			const {entries, select, listTarget: target, listErrorMsg, listUnknownErrorMsg, submitBtn, deleteBtn, messageField} = props;
+			const {entries, select, onNewEntry, listTarget: target, listErrorMsg, listUnknownErrorMsg, submitBtn, deleteBtn, messageField} = props;
 			const {useImages, imageUploadBtn, imageUploadField} = props;
 
 			let old = select.value;
@@ -52,6 +52,9 @@ updateCSRFToken();
 
 							option.setAttribute("value", entries.length - 1);
 							option.innerHTML = entry.title;
+
+							if(onNewEntry)
+								onNewEntry(entry, option);
 
 							select.options.length++;
 							select.options[select.options.length - 1] = option;
@@ -208,7 +211,7 @@ updateCSRFToken();
 
 		function formSetup(props)
 		{
-			const {form, entries, select, submitTarget: target, titleInput, descInput, messageField} = props;
+			const {form, entries, select, onSelect, submitTarget: target, titleInput, descInput, messageField} = props;
 			const {submitBtn, submitNewSuccessMsg, submitUpdateSuccessMsg, deleteBtn, deleteConfirmBtn, deleteSuccessMsg} = props;
 			const {useImages, imageUploadList, imageUploadBtn, imageUploadField, imageProgress, imageProgressBar} = props;
 
@@ -219,6 +222,9 @@ updateCSRFToken();
 			{
 				messageField.innerHTML = "";
 				formUpdateFields(props);
+
+				if(onSelect)
+					onSelect(select.value);
 			});
 
 			if(useImages)

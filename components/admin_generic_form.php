@@ -30,7 +30,7 @@
 		<div class="mb-3">
 			<label class="form-label"><?= $formImageLabel ?></label>
 			<div class="editor-box">
-				<div id="<?= $formPrefix ?>Thumbs"><?= $formImageSelect ?></div>
+				<div id="<?= $formPrefix ?>Thumbs"></div>
 				<br>
 				<label for="<?= $formPrefix ?>Upload" id="<?= $formPrefix ?>UploadButton" class="btn btn-success disabled">Ajouter...</label>
 				<input type="file" id="<?= $formPrefix ?>Upload" class="d-none" accept=".png,.jpg,.jpeg,.webp" disabled>
@@ -46,6 +46,9 @@
 		</div>
 
 		<button type="submit" class="btn btn-success" id="<?= $formPrefix ?>Button" disabled></button>
+		<?php if($formUseAltButton): ?>
+		<button type="button" class="btn btn-success" id="<?= $formPrefix ?>AltButton" disabled><?= $formAltButtonText ?></button>
+		<?php endif; ?>
 		<button type="button" class="btn btn-danger" id="<?= $formPrefix ?>Delete" data-bs-toggle="modal" data-bs-target="#<?= $formPrefix ?>DeleteModal" disabled><?= $formDelete ?></button>
 	</form>
 </div>

@@ -33,6 +33,11 @@ if($delete == "")
 		exit("Description invalide");
 	}
 }
+else if($id == 0)
+{
+	http_response_code(400);
+	exit("Service invalide");
+}
 
 if($id == 0) // create
 {

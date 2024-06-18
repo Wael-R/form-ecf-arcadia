@@ -14,7 +14,7 @@ if($_SERVER['REQUEST_METHOD'] != "GET")
 
 $sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
 
-$res = $sqli->execute_query("SELECT animalId, name, race FROM animals;");
+$res = $sqli->execute_query("SELECT animalId, name, race, habitat FROM animals;");
 
 if(!$res)
 {
@@ -29,6 +29,7 @@ while($anim = $res->fetch_row())
 	$id = $anim[0];
 	$title = $anim[1];
 	$race = $anim[2];
+	$habitat = $anim[3];
 
 	$res2 = $sqli->execute_query("SELECT animalThumbId, source FROM animalThumbnails WHERE animal = ?;", [$id]);
 
@@ -48,7 +49,7 @@ while($anim = $res->fetch_row())
 		$thumbs[] = ["id" => $thumbId, "src" => $thumbSrc];
 	}
 
-	$anims[] = ["id" => $id, "title" => $title, "desc" => $race, "thumbs" => $thumbs];
+	$anims[] = ["id" => $id, "title" => $title, "desc" => $race, "habitat" => $habitat, "thumbs" => $thumbs];
 }
 
 echo(json_encode($anims));
