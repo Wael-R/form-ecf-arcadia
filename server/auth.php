@@ -2,7 +2,8 @@
 if(php_sapi_name() != "cli")
 	session_start();
 
-$config = json_decode(file_get_contents(__DIR__ . "/config.json"));
+if(is_file(__DIR__ . "/config.json"))
+	$config = json_decode(file_get_contents(__DIR__ . "/config.json"));
 
 /** Generates a new CSRF token */
 function updateCSRFToken()

@@ -68,7 +68,6 @@
 						loginMessage.innerHTML = "Compte crée avec succès";
 						emailField.value = "";
 						passField.value = "";
-						roleField.value = "";
 					}
 					else
 						loginMessage.innerHTML = "Erreur inconnue (" + http.status + ")";

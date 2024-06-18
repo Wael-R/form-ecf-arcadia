@@ -1,5 +1,6 @@
 <?php
 require_once("../server/auth.php");
+require_once("../server/mail.php");
 
 $role = authCheck();
 
@@ -47,11 +48,19 @@ if($account)
 	exit("Cette e-mail existe déjà");
 }
 
+$res2 = sendMail($user, "Votre compte " . ($role == "employee" ? "employé" : "vétérinaire") . " Arcadia", "Votre compte Arcadia a été crée.<br>Veuillez contacter un administrateur pour obtenir votre mot de passe.");
+
+if($res2 != "" && $res2 != -1)
+{
+	http_response_code(400);
+	exit("Erreur lors de l'envoi de l'e-mail d'inscription");
+}
+
 $hash = password_hash($pass, PASSWORD_DEFAULT);
 
-$res2 = $sqli->execute_query("INSERT INTO accounts (userId, email, password, role) VALUES (UUID_TO_BIN(UUID()), ?, ?, ?);", [$user, $hash, $role]);
+$res3 = $sqli->execute_query("INSERT INTO accounts (userId, email, password, role) VALUES (UUID_TO_BIN(UUID()), ?, ?, ?);", [$user, $hash, $role]);
 
-if(!$res2)
+if(!$res3)
 {
 	http_response_code(400);
 	exit("Erreur inconnue (2," . $sqli->errno . ")");

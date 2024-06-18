@@ -9,12 +9,110 @@ if(php_sapi_name() != "cli")
 
 require_once("./auth.php");
 
+// * SOURCE: https://gist.github.com/scribu/5877523
+// slightly modified, couldn't find any cleaner way of doing this on windows
+function prompt_silent($prompt = "") {
+	echo($prompt);
+
+	echo("\033[107;97m");
+	$input = fgets(STDIN);
+	echo("\033[0m");
+
+	return rtrim($input, "\r\n");
+}
+
 echo("This will recreate all database tables and overwrite their data.\nType 'OK' to proceed...\n\n");
 
 if(readline() != "OK")
-	exit("\nCanceled database creation.\n\n");
+	exit("\nCanceled setup.\n\n");
 
-$config = json_decode(file_get_contents(__DIR__ . "/config.json"));
+echo("\n");
+$hostname = readline("Enter the MySQL server hostname (localhost): ");
+if($hostname == "")
+	$hostname = "localhost";
+
+echo("\n");
+$hostport = readline("Enter the MySQL server host port (3306): ");
+if($hostport == "")
+	$hostport = "3306";
+
+echo("\n");
+$username = readline("Enter the MySQL server username (root): ");
+if($username == "")
+	$username = "root";
+
+$password = prompt_silent("\nEnter the MySQL server password (1234): ");
+if($password == "")
+	$password = "1234";
+
+$mailHostname = "";
+$mailPort = "";
+$mailUsername = "";
+$mailPassword = "";
+
+echo("\n");
+$mailHostname = readline("Enter the email SMTP server hostname: ");
+if($mailHostname == "")
+	echo("No SMTP server set; no emails will be sent\n");
+else
+{
+	echo("\n");
+	$mailPort = readline("Enter the email SMTP server port (587): ");
+	if($mailPort == "")
+		$mailPort = "587";
+
+	while(true)
+	{
+		echo("\n");
+		$mailUsername = readline("Enter the SMTP email to use: ");
+
+		if(!isEmailAddress($mailUsername))
+			echo("Invalid email address");
+		else
+			break;
+	}
+
+	while(true)
+	{
+		$mailPassword = prompt_silent("\nEnter the SMTP password to use: ");
+
+		if(strlen($mailPassword) < 1)
+			echo("Invalid password");
+		else
+		{
+			$con = prompt_silent("Confirm password: ");
+
+			if($con != $mailPassword)
+				echo("Passwords don't match\n");
+			else
+				break;
+		}
+	}
+}
+
+$config = [
+	"sql" => [
+		"hostname" => $hostname,
+		"port" => $hostport,
+		"username" => $username,
+		"password" => $password,
+	],
+	"mail" => [
+		"hostname" => $mailHostname,
+		"port" => $mailPort,
+		"username" => $mailUsername,
+		"password" => $mailPassword,
+	],
+	"sessionTimeout" => 12,
+	"sessionIPLock" => true,
+];
+
+$path = __DIR__ . "/config.json";
+$json = json_encode($config, JSON_PRETTY_PRINT);
+
+file_put_contents($path, $json);
+
+$config = json_decode($json); // a bit silly, turns the array into objects
 
 $sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, null, $config->sql->port);
 
@@ -114,18 +212,6 @@ $req = "INSERT INTO accounts (userId, email, password, role) VALUES (UUID_TO_BIN
 $sqli->query("USE arcadia");
 $stmt = $sqli->prepare($req);
 
-// * SOURCE: https://gist.github.com/scribu/5877523
-// slightly modified, couldn't find any cleaner way of doing this on windows
-function prompt_silent($prompt = "") {
-	echo($prompt);
-
-	echo("\033[107;97m");
-	$input = fgets(STDIN);
-	echo("\033[0m");
-
-	return rtrim($input, "\r\n");
-}
-
 if($stmt)
 {
 	while(true)
@@ -154,7 +240,7 @@ if($stmt)
 			break;
 		}
 
-		echo("\nPasswords don't match.\n");
+		echo("\nPasswords don't match\n");
 	}
 
 	$stmt->bind_param("ss", $email, $hash);
