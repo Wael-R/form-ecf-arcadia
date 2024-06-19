@@ -54,7 +54,7 @@
 			let pass = passField.value;
 
 			let roleField = document.getElementById("roleEmployee");
-			let role = (roleField.value ? "employee" : "veterinarian");
+			let role = (roleField.checked ? "employee" : "veterinarian");
 
 			let http = new XMLHttpRequest();
 
