@@ -16,9 +16,9 @@ if($_SERVER['REQUEST_METHOD'] != "POST" || !checkCSRF())
 $heads = apache_request_headers();
 $user = base64_decode($heads["Acc-Username"]);
 $pass = base64_decode($heads["Acc-Password"]);
-$role = $heads["Acc-Role"];
+$role2 = $heads["Acc-Role"];
 
-if($role != "employee" && $role != "veterinarian")
+if($role2 != "employee" && $role2 != "veterinarian")
 {
 	http_response_code(400);
 	exit("Role invalide");
@@ -48,7 +48,7 @@ if($account)
 	exit("Cette e-mail existe déjà");
 }
 
-$res2 = sendMail($user, "Votre compte " . ($role == "employee" ? "employé" : "vétérinaire") . " Arcadia", "Votre compte Arcadia a été crée.<br>Veuillez contacter un administrateur pour obtenir votre mot de passe.");
+$res2 = sendMail($user, "Votre compte " . ($role2 == "employee" ? "employé" : "vétérinaire") . " Arcadia", "Votre compte Arcadia a été crée.<br>Veuillez contacter un administrateur pour obtenir votre mot de passe.");
 
 if($res2 != "" && $res2 != -1)
 {
@@ -58,7 +58,7 @@ if($res2 != "" && $res2 != -1)
 
 $hash = password_hash($pass, PASSWORD_DEFAULT);
 
-$res3 = $sqli->execute_query("INSERT INTO accounts (userId, email, password, role) VALUES (UUID_TO_BIN(UUID()), ?, ?, ?);", [$user, $hash, $role]);
+$res3 = $sqli->execute_query("INSERT INTO accounts (userId, email, password, role) VALUES (UUID_TO_BIN(UUID()), ?, ?, ?);", [$user, $hash, $role2]);
 
 if(!$res3)
 {
