@@ -447,7 +447,8 @@ updateCSRFToken();
 				}
 				else if($role == "veterinarian")
 				{
-
+					echo("<a class=\"text-success fw-bold\" href=\"#animalEditor\">Animaux</a> - ");
+					echo("<a class=\"text-success fw-bold\" href=\"#habitatComment\">Habitats</a>\n");
 				}
 				?>
 			</h5>
@@ -483,7 +484,7 @@ updateCSRFToken();
 			}
 			else if($role == "veterinarian")
 			{
-				// todo
+				include("../components/veterinarian_animal_form.php");
 			}
 			?>
 		</div>
