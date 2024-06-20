@@ -169,6 +169,7 @@ CREATE TABLE animals (
 	animalId INT AUTO_INCREMENT,
 	name VARCHAR(100) NOT NULL UNIQUE,
 	race VARCHAR(100) NOT NULL,
+	health VARCHAR(50) NOT NULL DEFAULT 'Bonne santé',
 	habitat INT NOT NULL,
 	PRIMARY KEY (animalId),
 	FOREIGN KEY (habitat) REFERENCES habitats(habitatId) ON DELETE CASCADE
@@ -180,6 +181,16 @@ CREATE TABLE animalThumbnails (
 	animal INT NOT NULL,
 	source VARCHAR(255) NOT NULL,
 	PRIMARY KEY (animalThumbId),
+	FOREIGN KEY (animal) REFERENCES animals(animalId) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS animalReports;
+CREATE TABLE animalReports (
+	animalReportId INT AUTO_INCREMENT,
+	animal INT NOT NULL,
+	date DATETIME NOT NULL,
+	comment VARCHAR(255) NOT NULL,
+	PRIMARY KEY (animalReportId),
 	FOREIGN KEY (animal) REFERENCES animals(animalId) ON DELETE CASCADE
 );
 
