@@ -129,9 +129,16 @@ updateCSRFToken();
 				{
 					imageUploadList.innerHTML = "";
 
+					let first = true;
+
 					entries[index].thumbs.forEach((thumb) => {
 						let div = document.createElement("div");
 						div.classList.add("form-control", "d-flex", "justify-content-between", "align-items-center");
+
+						if(first)
+							first = false;
+						else
+							div.classList.add("mt-2");
 
 						let link = document.createElement("a");
 						div.appendChild(link);
