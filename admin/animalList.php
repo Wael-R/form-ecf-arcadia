@@ -4,7 +4,7 @@ require_once("../server/utility.php");
 
 $role = authCheck();
 
-if($role != "admin")
+if($role != "admin" && $role != "veterinarian")
 	connectionFail("Permissions insuffisantes");
 
 if($_SERVER['REQUEST_METHOD'] != "GET")
@@ -16,7 +16,7 @@ if($_SERVER['REQUEST_METHOD'] != "GET")
 $sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
 
 $res = $sqli->execute_query(
-	"SELECT a.animalId, a.name, a.race, a.health, a.habitat, t.animalThumbId, t.source, r.animalReportId, r.date, r.comment
+	"SELECT a.animalId, a.name, a.race, a.health, a.habitat, t.animalThumbId, t.source, r.animalReportId, r.date, r.food, r.amount, r.comment
 		FROM animals AS a
 		LEFT JOIN animalThumbnails AS t ON a.animalId = t.animal
 		LEFT JOIN animalReports AS r ON a.animalId = r.animal;"
@@ -44,7 +44,9 @@ while($anim = $res->fetch_row())
 	
 	$reportId = $anim[7];
 	$reportDate = $anim[8];
-	$reportComment = $anim[9];
+	$reportFood = $anim[9];
+	$reportAmount = $anim[10];
+	$reportComment = $anim[11];
 
 	$key = $keys[$id] ?? count($anims);
 	$keys[$id] = $key;
@@ -68,7 +70,7 @@ while($anim = $res->fetch_row())
 	$array["reports"] = null;
 
 	if($reportId)
-		$array["reports"] = ["id" => $reportId, "date" => $reportDate, "comment" => $reportComment];
+		$array["reports"] = ["id" => $reportId, "date" => $reportDate, "food" => $reportFood, "amount" => $reportAmount, "comment" => $reportComment];
 
 	$anims[$key] = mergeKeys($array, $anims[$key], "id", "title", "desc", "health", "habitat");
 }

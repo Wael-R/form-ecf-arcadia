@@ -91,6 +91,12 @@ body
 	border-radius: var(--bs-border-radius);
 }
 
+.editor-scroll
+{
+	max-height: 24rem;
+	overflow: auto;
+}
+
 .editor-progress
 {
 	margin-top: 1em;

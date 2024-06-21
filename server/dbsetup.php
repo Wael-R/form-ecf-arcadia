@@ -189,7 +189,9 @@ CREATE TABLE animalReports (
 	animalReportId INT AUTO_INCREMENT,
 	animal INT NOT NULL,
 	date DATETIME NOT NULL,
-	comment VARCHAR(255) NOT NULL,
+	food VARCHAR(255) NOT NULL,
+	amount VARCHAR(255) NOT NULL,
+	comment VARCHAR(255),
 	PRIMARY KEY (animalReportId),
 	FOREIGN KEY (animal) REFERENCES animals(animalId) ON DELETE CASCADE
 );
