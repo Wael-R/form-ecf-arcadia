@@ -15,7 +15,7 @@ updateCSRFToken();
 
 		function formGenerateSelectOptions(props)
 		{
-			const {entries, select, onNewEntry, listTarget: target, listErrorMsg, listUnknownErrorMsg, submitBtn, deleteBtn, messageField} = props;
+			const {entries, select, onNewEntry, onLoaded, listTarget: target, listErrorMsg, listUnknownErrorMsg, submitBtn, deleteBtn, messageField} = props;
 			const {useImages, imageUploadBtn, imageUploadField} = props;
 
 			let old = select.value;
@@ -73,6 +73,11 @@ updateCSRFToken();
 
 						if(select.value == "")
 							select.value = ""; // not resetting this causes out of bounds values to be blank
+
+						if(onLoaded)
+							onLoaded(entries);
+
+						select.dispatchEvent(new Event("change"));
 
 						formUpdateFields(props);
 					}

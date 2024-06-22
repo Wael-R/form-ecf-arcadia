@@ -93,7 +93,7 @@ body
 
 .editor-scroll
 {
-	max-height: 24rem;
+	max-height: 32rem;
 	overflow: auto;
 }
 

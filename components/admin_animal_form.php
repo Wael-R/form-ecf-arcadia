@@ -23,6 +23,8 @@
 	include("../components/admin_generic_form.php");
 ?>
 
+<?php include("animal_report_list.php"); ?>
+
 <div class="modal fade" id="animalHabitatModal" tabindex="-1" role="dialog" aria-labelledby="animalHabitatModalTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -54,6 +56,8 @@ const animalProps = {
 	altButton: document.getElementById("animalAltButton"),
 
 	onSelect: function(idx) {
+		displayAnimalReports(animalProps.entries[idx] ?? null);
+
 		if(idx !== "" && habitatProps.entries.length > 0)
 		{
 			animalProps.altButton.removeAttribute("disabled");
@@ -87,6 +91,10 @@ const animalProps = {
 
 		if(!found)
 			option.innerHTML = `(Aucun habitat) ${option.innerHTML}`;
+	},
+
+	onLoaded: function(entries) {
+		setupAnimalReports(entries);
 	},
 
 	listTarget: "./animalList.php",

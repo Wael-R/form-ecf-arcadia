@@ -3,7 +3,7 @@
 
 <br>
 
-<div class="card editor-card mb-3">
+<div class="card editor-card">
 	<form id="animalForm" action="javascript:void(0);" autocomplete="off">
 		<div class="mb-3">
 			<label for="animalSelect" class="form-label">Animal</label>
@@ -52,13 +52,6 @@
 
 	if(vetForm)
 	{
-		function getCurrentDate()
-		{
-			let date = new Date();
-			date.setSeconds(0, 0);
-			return date.toISOString().split(".")[0]; // toISOString returns milliseconds which dont fit the datetime-local format
-		}
-
 		function vetGenerateSelectOptions()
 		{
 			const messageField = document.getElementById("animalMessage");
@@ -98,6 +91,8 @@
 							select.options[select.options.length - 1] = option;
 						});
 
+						setupAnimalReports(vetData);
+
 						if(vetData.length > 0)
 						{
 							submit.removeAttribute("disabled");
@@ -132,7 +127,8 @@
 			const commentField = document.getElementById("animalComment");
 			const dateField = document.getElementById("animalDate");
 
-			dateField.value = getCurrentDate();
+			dateField.value = getDateString(new Date());
+			dateField.max = dateField.value;
 
 			vetGenerateSelectOptions();
 
@@ -146,10 +142,10 @@
 				if(anim)
 				{
 					healthField.value = anim.health;
-					foodField.value = anim.reports[0]?.food ?? "Nourriture...";
-					amountField.value = anim.reports[0]?.amount ?? "Quantité...";
-					commentField.value = anim.reports[0]?.comment ?? "";
-					dateField.value = anim.reports[0]?.date ?? getCurrentDate();
+					foodField.value = "Nourriture...";
+					amountField.value = "Quantité...";
+					commentField.value = "";
+					dateField.value = getDateString(new Date());
 
 					displayAnimalReports(anim);
 				}
