@@ -191,7 +191,7 @@ CREATE TABLE animalReports (
 	date DATETIME NOT NULL,
 	food VARCHAR(255) NOT NULL,
 	amount VARCHAR(255) NOT NULL,
-	comment VARCHAR(255),
+	comment TEXT,
 	PRIMARY KEY (animalReportId),
 	FOREIGN KEY (animal) REFERENCES animals(animalId) ON DELETE CASCADE
 );
