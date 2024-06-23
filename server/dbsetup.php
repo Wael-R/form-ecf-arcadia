@@ -164,6 +164,15 @@ CREATE TABLE habitatThumbnails (
 	FOREIGN KEY (habitat) REFERENCES habitats(habitatId) ON DELETE CASCADE
 );
 
+DROP TABLE IF EXISTS habitatComments;
+CREATE TABLE habitatComments (
+	habitatCommentId INT AUTO_INCREMENT,
+	habitat INT NOT NULL,
+	comment TEXT NOT NULL,
+	PRIMARY KEY (habitatCommentId),
+	FOREIGN KEY (habitat) REFERENCES habitats(habitatId) ON DELETE CASCADE
+);
+
 DROP TABLE IF EXISTS animals;
 CREATE TABLE animals (
 	animalId INT AUTO_INCREMENT,
