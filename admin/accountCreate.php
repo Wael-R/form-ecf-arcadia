@@ -24,6 +24,12 @@ if($role2 != "employee" && $role2 != "veterinarian")
 	exit("Role invalide");
 }
 
+if(strlen($pass) < 1)
+{
+	http_response_code(400);
+	exit("Mot de passe invalide");
+}
+
 if(!isEmailAddress($user))
 {
 	http_response_code(400);
