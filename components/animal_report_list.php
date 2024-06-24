@@ -40,17 +40,6 @@
 		displayReports();
 	});
 
-	function getDateString(date)
-	{
-		if(!date || !date.getTime())
-			return "";
-
-		let date2 = new Date(date);
-		date2.setSeconds(0, 0);
-		date2.setMinutes(date2.getMinutes() - date2.getTimezoneOffset());
-		return date2.toISOString().split(".")[0]; // toISOString returns milliseconds which dont fit the datetime-local format
-	}
-
 	function setupAnimalReports(animals)
 	{
 		if(!animals || animals.length <= 0)

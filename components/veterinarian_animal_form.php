@@ -127,9 +127,6 @@
 			const commentField = document.getElementById("animalComment");
 			const dateField = document.getElementById("animalDate");
 
-			dateField.value = getDateString(new Date());
-			dateField.max = dateField.value;
-
 			vetGenerateSelectOptions();
 
 			select.addEventListener("change", (evt) =>
@@ -146,6 +143,7 @@
 					amountField.value = "Quantité...";
 					commentField.value = "";
 					dateField.value = getDateString(new Date());
+					dateField.max = dateField.value;
 
 					displayAnimalReports(anim);
 				}
