@@ -58,8 +58,8 @@ $sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql-
 						{
 							while($service = $res->fetch_row())
 							{
-								$serviceTitle = $service[1];
-								$serviceDesc = $service[2];
+								$serviceTitle = htmlspecialchars($service[1]);
+								$serviceDesc = htmlspecialchars($service[2]);
 
 								include("./components/svc_card.php");
 							}
@@ -81,10 +81,10 @@ $sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql-
 					{
 						while($habitat = $res->fetch_row())
 						{
-							$cardTitle = $habitat[1];
+							$cardTitle = htmlspecialchars($habitat[1]);
 							$cardButton = "Voir plus";
 							$cardLink = "#todo";
-							$cardDesc = $habitat[2];
+							$cardDesc = htmlspecialchars($habitat[2]);
 
 							$res2 = $sqli->execute_query("SELECT source FROM habitatThumbnails WHERE habitat = ? ORDER BY habitatThumbId ASC LIMIT 1;", [$habitat[0]]);
 
@@ -117,10 +117,10 @@ $sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql-
 					{
 						while($animal = $res->fetch_row())
 						{
-							$cardTitle = $animal[1];
+							$cardTitle = htmlspecialchars($animal[1]);
 							$cardButton = "Voir plus";
 							$cardLink = "#todo";
-							$cardDesc = $animal[2];
+							$cardDesc = htmlspecialchars($animal[2]);
 
 							$res2 = $sqli->execute_query("SELECT source FROM animalThumbnails WHERE animal = ? ORDER BY animalThumbId ASC LIMIT 1;", [$animal[0]]);
 
