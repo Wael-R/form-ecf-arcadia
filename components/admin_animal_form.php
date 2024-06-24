@@ -151,7 +151,7 @@ document.getElementById("animalHabitatConfirm").addEventListener("click", (evt) 
 		if(request.readyState == 4)
 		{
 			if(request.status == 400 || request.status == 401 || request.status == 403)
-				messageField.innerHTML = "Erreur: " + request.responseText;
+				messageField.innerHTML = "Erreur: " + stripHTML(request.responseText);
 			else if(request.status == 200)
 			{
 				messageField.innerHTML = "Animal affecté a l'habitat avec succès";

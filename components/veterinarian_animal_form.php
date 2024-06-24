@@ -69,7 +69,7 @@
 				if(request.readyState == 4)
 				{
 					if(request.status == 400 || request.status == 401 || request.status == 403)
-						messageField.innerHTML = "Erreur lors du chargement des animaux: " + request.responseText;
+						messageField.innerHTML = "Erreur lors du chargement des animaux: " + stripHTML(request.responseText);
 					else if(request.status == 200)
 					{
 						vetData.length = 0;
@@ -182,7 +182,7 @@
 					if(request.readyState == 4)
 					{
 						if(request.status == 400 || request.status == 401 || request.status == 403)
-							messageField.innerHTML = "Erreur: " + request.responseText;
+							messageField.innerHTML = "Erreur: " + stripHTML(request.responseText);
 						else if(request.status == 200)
 						{
 							messageField.innerHTML = "Avis soumis avec succès";

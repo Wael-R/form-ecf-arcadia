@@ -11,8 +11,8 @@ updateCSRFToken();
 	<?php $title = "Admin"; include("../components/head.php"); ?>
 </head>
 <body>
+	<script src="/utility.js"></script>
 	<script>
-
 		function formGenerateSelectOptions(props)
 		{
 			const {entries, select, onNewEntry, onLoaded, listTarget: target, listErrorMsg, listUnknownErrorMsg, submitBtn, deleteBtn, messageField} = props;
@@ -36,7 +36,7 @@ updateCSRFToken();
 				if(request.readyState == 4)
 				{
 					if(request.status == 400 || request.status == 401 || request.status == 403)
-						messageField.innerHTML = listErrorMsg + " : " + request.responseText;
+						messageField.innerHTML = listErrorMsg + " : " + stripHTML(request.responseText);
 					else if(request.status == 200)
 					{
 						select.options.length = 1;
@@ -187,7 +187,7 @@ updateCSRFToken();
 									imageUploadField.removeAttribute("disabled");
 
 									if(request.status == 400 || request.status == 401 || request.status == 403)
-										messageField.innerHTML = "Erreur: " + request.responseText;
+										messageField.innerHTML = "Erreur: " + stripHTML(request.responseText);
 									else if(request.status == 200)
 									{
 										messageField.innerHTML = "Image supprimée avec succès";
@@ -284,7 +284,7 @@ updateCSRFToken();
 								imageProgress.classList.add("d-none");
 
 								if(request.status == 400 || request.status == 401 || request.status == 403)
-									messageField.innerHTML = "Erreur: " + request.responseText;
+									messageField.innerHTML = "Erreur: " + stripHTML(request.responseText);
 								else if(request.status == 200)
 								{
 									messageField.innerHTML = "Image ajoutée avec succès";
@@ -346,7 +346,7 @@ updateCSRFToken();
 						if(request.status == 400 || request.status == 401 || request.status == 403)
 						{
 							deleteBtn.removeAttribute("disabled");
-							messageField.innerHTML = "Erreur: " + request.responseText;
+							messageField.innerHTML = "Erreur: " + stripHTML(request.responseText);
 						}
 						else if(request.status == 200)
 						{
@@ -407,7 +407,7 @@ updateCSRFToken();
 							if(updating)
 								deleteBtn.removeAttribute("disabled");
 
-							messageField.innerHTML = "Erreur: " + request.responseText;
+							messageField.innerHTML = "Erreur: " + stripHTML(request.responseText);
 						}
 						else if(request.status == 200)
 						{

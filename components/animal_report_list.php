@@ -162,25 +162,25 @@
 			};
 
 			let date = document.createElement("p");
-			date.innerHTML = "<i>Pour <b>" + report.animal.title + "</b>, passé le " + reportDate.toLocaleString("fr", format) + "</i>";
+			date.innerHTML = "<i>Pour <b>" + stripHTML(report.animal.title) + "</b>, passé le " + reportDate.toLocaleString("fr", format) + "</i>";
 
 			div.appendChild(date);
 
 			let food = document.createElement("p");
-			food.innerHTML = "<b>Nourriture proposée:</b> " + report.food;
+			food.innerHTML = "<b>Nourriture proposée:</b> " + stripHTML(report.food);
 
 			div.appendChild(food);
 
 			let amount = document.createElement("p");
-			amount.innerHTML = "<b>Quantité proposée:</b> " + report.amount;
+			amount.innerHTML = "<b>Quantité proposée:</b> " + stripHTML(report.amount);
 
 			div.appendChild(amount);
 
 			if(report.comment)
 			{
 				let comment = document.createElement("p");
-				comment.innerHTML = "<b>Détails:</b><br>" + report.comment.replace(/\n/g, "<br>");
-	
+				comment.innerHTML = "<b>Détails:</b><br>" + stripHTML(report.comment).replace(/\n/g, "<br>");
+
 				div.appendChild(comment);
 			}
 
