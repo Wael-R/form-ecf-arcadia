@@ -455,7 +455,8 @@ updateCSRFToken();
 				}
 				else if($role == "employee")
 				{
-					echo("<a class=\"text-success fw-bold\" href=\"#serviceEditor\">Services</a>\n");
+					echo("<a class=\"text-success fw-bold\" href=\"#serviceEditor\">Services</a> - ");
+					echo("<a class=\"text-success fw-bold\" href=\"#animalEditor\">Animaux</a>\n");
 				}
 				else if($role == "veterinarian")
 				{
@@ -493,6 +494,10 @@ updateCSRFToken();
 			else if($role == "employee")
 			{
 				include("../components/admin_service_form.php");
+
+				echo($spacer);
+
+				include("../components/employee_animal_form.php");
 			}
 			else if($role == "veterinarian")
 			{

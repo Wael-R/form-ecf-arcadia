@@ -206,6 +206,17 @@ CREATE TABLE animalReports (
 	FOREIGN KEY (animal) REFERENCES animals(animalId) ON DELETE CASCADE
 );
 
+DROP TABLE IF EXISTS animalFoodReports;
+CREATE TABLE animalFoodReports (
+	animalFoodId INT AUTO_INCREMENT,
+	animal INT NOT NULL,
+	date DATETIME NOT NULL,
+	food VARCHAR(255) NOT NULL,
+	amount VARCHAR(255) NOT NULL,
+	PRIMARY KEY (animalFoodId),
+	FOREIGN KEY (animal) REFERENCES animals(animalId) ON DELETE CASCADE
+);
+
 -- todo: add reviews
 ";
 

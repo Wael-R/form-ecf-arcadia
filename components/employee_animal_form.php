@@ -1,10 +1,10 @@
 <a class="anchor" id="animalEditor"></a>
-<h5 class="fw-bold">Avis sur les animaux</h5>
+<h5 class="fw-bold">Consommation des animaux</h5>
 
 <br>
 
 <div class="card editor-card">
-	<form id="animalForm" action="javascript:void(0);" autocomplete="off">
+	<form id="animalFoodForm" action="javascript:void(0);" autocomplete="off">
 		<div class="mb-3">
 			<label for="animalSelect" class="form-label">Animal</label>
 			<select class="form-control" id="animalSelect">
@@ -12,23 +12,13 @@
 		</div>
 
 		<div class="mb-3">
-			<label for="animalHealth" class="form-label">État de l'animal</label>
-			<input type="text" class="form-control" id="animalHealth">
-		</div>
-
-		<div class="mb-3">
-			<label for="animalFood" class="form-label">Nourriture proposée</label>
+			<label for="animalFood" class="form-label">Nourriture</label>
 			<input type="text" class="form-control" id="animalFood">
 		</div>
 
 		<div class="mb-3">
-			<label for="animalFoodAmount" class="form-label">Quantité de nourriture proposée</label>
+			<label for="animalFoodAmount" class="form-label">Quantité de nourriture</label>
 			<input type="text" class="form-control" id="animalFoodAmount">
-		</div>
-
-		<div class="mb-3">
-			<label for="animalComment" class="form-label">Détails</label>
-			<textarea class="form-control" id="animalComment" rows="3"></textarea>
 		</div>
 
 		<div class="mb-3">
@@ -40,25 +30,23 @@
 			<p class="login-message" id="animalMessage"></p>
 		</div>
 
-		<button type="submit" class="btn btn-success" id="animalButton" disabled>Soumettre</button>
+		<button type="submit" class="btn btn-success" id="animalFoodButton" disabled>Ajouter</button>
 	</form>
 </div>
 
 <?php include("animal_food_list.php"); ?>
 
-<?php include("animal_report_list.php"); ?>
-
 <script>
-	const vetForm = document.getElementById("animalForm");
-	const vetData = [];
+	const animalFoodForm = document.getElementById("animalFoodForm");
+	const animalFoodData = [];
 
-	if(vetForm)
+	if(animalFoodForm)
 	{
-		function vetGenerateSelectOptions()
+		function empGenerateSelectOptions()
 		{
 			const messageField = document.getElementById("animalMessage");
 			const select = document.getElementById("animalSelect");
-			const submit = document.getElementById("animalButton");
+			const submit = document.getElementById("animalFoodButton");
 
 			const target = "animalList.php";
 
@@ -74,7 +62,7 @@
 						messageField.innerHTML = "Erreur lors du chargement des animaux: " + stripHTML(request.responseText);
 					else if(request.status == 200)
 					{
-						vetData.length = 0;
+						animalFoodData.length = 0;
 
 						let old = select.value;
 						select.options.length = 0;
@@ -82,21 +70,20 @@
 						const data = JSON.parse(request.responseText);
 
 						data.forEach((animal) => {
-							vetData.push(animal);
+							animalFoodData.push(animal);
 
 							let option = document.createElement("option");
 
-							option.setAttribute("value", vetData.length - 1);
+							option.setAttribute("value", animalFoodData.length - 1);
 							option.innerHTML = animal.title;
 
 							select.options.length++;
 							select.options[select.options.length - 1] = option;
 						});
 
-						setupAnimalReports(vetData);
-						setupAnimalFoodReports(vetData);
+						setupAnimalFoodReports(animalFoodData);
 
-						if(vetData.length > 0)
+						if(animalFoodData.length > 0)
 						{
 							submit.removeAttribute("disabled");
 							select.removeAttribute("disabled");
@@ -118,66 +105,57 @@
 			request.send();
 		}
 
-		function vetSetupForm()
+		function empSetupForm()
 		{
 			const messageField = document.getElementById("animalMessage");
 			const select = document.getElementById("animalSelect");
-			const submit = document.getElementById("animalButton");
-			
-			const healthField = document.getElementById("animalHealth");
+			const submit = document.getElementById("animalFoodButton");
+
 			const foodField = document.getElementById("animalFood");
 			const amountField = document.getElementById("animalFoodAmount");
-			const commentField = document.getElementById("animalComment");
 			const dateField = document.getElementById("animalDate");
 
-			vetGenerateSelectOptions();
+			empGenerateSelectOptions();
 
 			select.addEventListener("change", (evt) =>
 			{
 				messageField.innerHTML = "";
 
 				let index = select.value;
-				let anim = vetData[index];
+				let anim = animalFoodData[index];
 
 				if(anim)
 				{
-					healthField.value = anim.health;
 					foodField.value = "Nourriture...";
 					amountField.value = "Quantité...";
-					commentField.value = "";
 					dateField.value = getDateString(new Date());
 					dateField.max = dateField.value;
 
-					displayAnimalReports(anim);
 					displayAnimalFoodReports(anim);
 				}
 			});
 
-			vetForm.addEventListener("submit", (evt) =>
+			animalFoodForm.addEventListener("submit", (evt) =>
 			{
-				const target = "animalReport.php";
+				const target = "animalFoodReport.php";
 
 				const token = "<?= getCSRFToken() ?>";
 
-				let health = healthField.value;
 				let food = foodField.value;
 				let amount = amountField.value;
-				let comment = commentField.value;
 				let date = dateField.value;
 
 				let request = new XMLHttpRequest();
 				let data = new FormData();
 
-				let animal = vetData[select.value];
+				let animal = animalFoodData[select.value];
 
 				if(!animal)
 					return;
 
 				data.append("id", animal.id);
-				data.append("health", health);
 				data.append("food", food);
 				data.append("amount", amount);
-				data.append("comment", comment);
 				data.append("date", date);
 
 				request.onreadystatechange = (ev) => {
@@ -188,7 +166,7 @@
 						else if(request.status == 200)
 						{
 							messageField.innerHTML = "Avis soumis avec succès";
-							vetGenerateSelectOptions();
+							empGenerateSelectOptions();
 						}
 						else
 							messageField.innerHTML = "Erreur inconnue (" + request.status + ")";
@@ -202,7 +180,7 @@
 			});
 		}
 
-		vetSetupForm();
+		empSetupForm();
 	}
 	else
 	{
