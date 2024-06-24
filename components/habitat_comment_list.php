@@ -77,7 +77,7 @@
 			};
 
 			let date = document.createElement("p");
-			date.innerHTML = "<i>Pour <b>" + stripHTML(comment.habitat.title) + "</b>, passé le " + new Date(comment.date).toLocaleString("fr", format) + "</i>";
+			date.innerHTML = "<i>Pour <b>" + stripHTML(comment.habitat.title) + "</b>, soumis le " + new Date(comment.date).toLocaleString("fr", format) + "</i>";
 
 			div.appendChild(date);
 
