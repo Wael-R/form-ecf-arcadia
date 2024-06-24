@@ -168,6 +168,7 @@ DROP TABLE IF EXISTS habitatComments;
 CREATE TABLE habitatComments (
 	habitatCommentId INT AUTO_INCREMENT,
 	habitat INT NOT NULL,
+	date DATETIME NOT NULL DEFAULT NOW(),
 	comment TEXT NOT NULL,
 	PRIMARY KEY (habitatCommentId),
 	FOREIGN KEY (habitat) REFERENCES habitats(habitatId) ON DELETE CASCADE

@@ -497,6 +497,10 @@ updateCSRFToken();
 			else if($role == "veterinarian")
 			{
 				include("../components/veterinarian_animal_form.php");
+
+				echo($spacer);
+
+				include("../components/veterinarian_habitat_form.php");
 			}
 			?>
 		</div>

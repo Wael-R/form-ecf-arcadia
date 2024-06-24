@@ -1,9 +1,10 @@
 <?php
 require_once("../server/auth.php");
+require_once("../server/utility.php");
 
 $role = authCheck();
 
-if($role != "admin")
+if($role != "admin" && $role != "veterinarian")
 	connectionFail("Permissions insuffisantes");
 
 if($_SERVER['REQUEST_METHOD'] != "GET")
@@ -14,7 +15,12 @@ if($_SERVER['REQUEST_METHOD'] != "GET")
 
 $sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
 
-$res = $sqli->execute_query("SELECT habitatId, name, description FROM habitats;");
+$res = $sqli->execute_query(
+	"SELECT h.habitatId, h.name, h.description, t.habitatThumbId, t.source, c.habitatCommentId, c.date, c.comment
+		FROM habitats AS h
+		LEFT JOIN habitatThumbnails AS t ON h.habitatId = t.habitat
+		LEFT JOIN habitatComments AS c ON h.habitatId = c.habitat;"
+);
 
 if(!$res)
 {
@@ -23,6 +29,7 @@ if(!$res)
 }
 
 $habs = [];
+$keys = [];
 
 while($hab = $res->fetch_row())
 {
@@ -30,25 +37,36 @@ while($hab = $res->fetch_row())
 	$title = $hab[1];
 	$desc = $hab[2];
 
-	$res2 = $sqli->execute_query("SELECT habitatThumbId, source FROM habitatThumbnails WHERE habitat = ?;", [$id]);
+	$thumbId = $hab[3];
+	$thumb = $hab[4];
 
-	if(!$res2)
-	{
-		http_response_code(400);
-		exit("Erreur inconnue (2," . $sqli->errno . ")");
-	}
+	$commentId = $hab[5];
+	$commentDate = $hab[6];
+	$commentComment = $hab[7];
 
-	$thumbs = [];
+	$key = $keys[$id] ?? count($habs);
+	$keys[$id] = $key;
 
-	while($thumb = $res2->fetch_row())
-	{
-		$thumbId = $thumb[0];
-		$thumbSrc = $thumb[1];
+	if(!isset($habs[$key]))
+		$habs[] = [];
 
-		$thumbs[] = ["id" => $thumbId, "src" => $thumbSrc];
-	}
+	$array = [
+		"id" => $id,
+		"title" => $title,
+		"desc" => $desc,
+	];
 
-	$habs[] = ["id" => $id, "title" => $title, "desc" => $desc, "thumbs" => $thumbs];
+	$array["thumbs"] = null;
+
+	if($thumbId)
+		$array["thumbs"] = ["id" => $thumbId, "src" => $thumb];
+
+	$array["comments"] = null;
+
+	if($commentId)
+		$array["comments"] = ["id" => $commentId, "date" => $commentDate, "comment" => $commentComment];
+
+	$habs[$key] = mergeKeys($array, $habs[$key], "id", "title", "desc");
 }
 
 echo(json_encode($habs));

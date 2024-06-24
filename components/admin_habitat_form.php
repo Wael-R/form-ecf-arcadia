@@ -23,6 +23,8 @@
 	include("../components/admin_generic_form.php");
 ?>
 
+<?php include("habitat_comment_list.php"); ?>
+
 <script>
 const habitatProps = {
 	entries: [],
@@ -30,6 +32,14 @@ const habitatProps = {
 	form: document.getElementById("habitatForm"),
 
 	select: document.getElementById("habitatSelect"),
+
+	onSelect: function(idx) {
+		displayHabitatComments(habitatProps.entries[idx] ?? null);
+	},
+
+	onLoaded: function(entries) {
+		setupHabitatComments(entries);
+	},
 
 	listTarget: "./habitatList.php",
 	listErrorMsg: "Erreur lors du chargement des habitats",
