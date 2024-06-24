@@ -60,6 +60,8 @@ const animalProps = {
 
 		if(idx !== "" && habitatProps.entries.length > 0)
 		{
+			animalProps.altSelect.options.length = 0;
+
 			animalProps.altButton.removeAttribute("disabled");
 			habitatProps.entries.forEach(habitat => {
 				if(habitat.id != animalProps.entries[idx].habitat)
