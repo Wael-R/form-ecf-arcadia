@@ -54,6 +54,12 @@ body
 	z-index: 2; /* fsr carousels have a z index of 1 */
 }
 
+.center
+{
+	margin: auto;
+	width: fit-content;
+}
+
 .anchor
 {
 	display: block;
