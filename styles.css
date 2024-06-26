@@ -87,7 +87,7 @@ body
 {
 	position: sticky;
 	top: 0;
-	z-index: 2; /* fsr carousels have a z index of 1 */
+	z-index: 3; /* carousels have a z index of 1, indicators have a z index of 2 */
 }
 
 .center
