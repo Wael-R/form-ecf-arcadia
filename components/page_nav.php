@@ -1,11 +1,12 @@
-<?php if($count > 1): ?>
+<?php require_once("./server/utility.php");
+if($count > 1): ?>
 <br><br>
 
 <div class="center">
 	<div class="btn-group">
 		<?php if($page > 1): ?>
-		<a class="btn btn-outline-success" href="?page=1">&lt;&lt;</a>
-		<a class="btn btn-outline-success" href="?page=<?= $page - 1 ?>">&lt;</a>
+		<a class="btn btn-outline-success" href="<?= addSearch("page", 1) ?>">&lt;&lt;</a>
+		<a class="btn btn-outline-success" href="<?= addSearch("page", $page - 1) ?>">&lt;</a>
 		<?php else: ?>
 		<a class="btn btn-outline-success disabled">&lt;&lt;</a>
 		<a class="btn btn-outline-success disabled">&lt;</a>
@@ -27,7 +28,7 @@
 			if($i != $page)
 			{
 				?>
-				<a class="btn btn-outline-success" href="?page=<?= $i ?>"><?= $i ?></a>
+				<a class="btn btn-outline-success" href="<?= addSearch("page", $i);?>"><?= $i ?></a>
 				<?php
 			}
 			else
@@ -47,8 +48,8 @@
 		?>
 
 		<?php if($page < $count): ?>
-		<a class="btn btn-outline-success" href="?page=<?= $page + 1 ?>">&gt;</a>
-		<a class="btn btn-outline-success" href="?page=<?= $count ?>">&gt;&gt;</a> 
+		<a class="btn btn-outline-success" href="<?= addSearch("page", $page + 1); ?>">&gt;</a>
+		<a class="btn btn-outline-success" href="<?= addSearch("page", $count); ?>">&gt;&gt;</a>
 		<?php else: ?>
 		<a class="btn btn-outline-success disabled">&gt;</a>
 		<a class="btn btn-outline-success disabled">&gt;&gt;</a> 
