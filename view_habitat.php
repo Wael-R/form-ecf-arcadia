@@ -58,7 +58,7 @@ if($res3)
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-	<?php $title = "Habitats"; include("./components/head.php"); ?>
+	<?php $title = $habitatTitle; include("./components/head.php"); ?>
 </head>
 <body>
 	<div class="main-container">
