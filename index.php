@@ -83,7 +83,7 @@ $sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql-
 						{
 							$cardTitle = htmlspecialchars($habitat[1]);
 							$cardButton = "Voir plus";
-							$cardLink = "#todo";
+							$cardLink = "view_habitat.php?id=" . $habitat[0];
 							$cardDesc = htmlspecialchars($habitat[2]);
 
 							$res2 = $sqli->execute_query("SELECT source FROM habitatThumbnails WHERE habitat = ? ORDER BY habitatThumbId ASC LIMIT 1;", [$habitat[0]]);
