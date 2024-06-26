@@ -67,7 +67,7 @@ if($res3)
 		<br><br>
 
 		<div class="main-row px-2 px-sm-5">
-			<h2 class="text-success fw-bold"><?= $habitatTitle ?></h2>
+			<h2 class="text-success fw-bold"><?= htmlspecialchars($habitatTitle) ?></h2>
 			<br>
 			<div class="container px-2">
 				<?php
@@ -107,7 +107,7 @@ if($res3)
 					}
 				?>
 
-				<p><?= str_replace("\n", "<br>", $habitatDesc) ?></p>
+				<p><?= str_replace("\n", "<br>", htmlspecialchars($habitatDesc)) ?></p>
 
 				<?php
 					if(count($habitatAnimals) > 0)
@@ -122,11 +122,11 @@ if($res3)
 							<div class="card mb-3 px-0">
 								<div class="row g-0">
 									<div class="col-md-3">
-										<img src="<?= $animal["thumb"] ?>" class="list-img rounded-start" alt="Image de <?= $animal["name"] ?>">
+										<img src="<?= $animal["thumb"] ?>" class="list-img rounded-start" alt="Image de <?= htmlspecialchars($animal["name"]) ?>">
 									</div>
 									<div class="col-md-9 card-body d-flex flex-column">
-										<h5 class="card-title main-card-line"><?= $animal["name"] ?></h5>
-										<p class="card-subtitle mb-2 text-body-secondary main-card-line"><?= $animal["race"] ?></p>
+										<h5 class="card-title main-card-line"><?= htmlspecialchars($animal["name"]) ?></h5>
+										<p class="card-subtitle mb-2 text-body-secondary main-card-line"><?= htmlspecialchars($animal["race"]) ?></p>
 										<div class="mt-auto d-flex justify-content-end">
 											<a class="btn btn-success" href="/view_animal?id=<?= $animal["id"] ?>">Voir</a>
 										</div>
