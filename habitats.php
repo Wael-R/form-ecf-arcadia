@@ -49,14 +49,14 @@ $search = $_GET["q"] ?? "";
 								$habitatDesc = htmlspecialchars($habitat[3]);
 								$count = floor(($habitat[0] - 1) / $pageSize) + 1;
 
-								$res2 = $sqli->execute_query("SELECT source FROM habitatThumbnails WHERE habitat = ? ORDER BY habitatThumbId ASC LIMIT 1;", [$habitat[1]]);
+								$res2 = $sqli->execute_query("SELECT source FROM habitatThumbnails WHERE habitat = ? ORDER BY habitatThumbId ASC LIMIT 1;", [$habitatId]);
 
 								$cardThumb = "";
-	
+
 								if($res2)
 								{
 									$thumb = $res2->fetch_row();
-	
+
 									if($thumb)
 										$cardThumb = $thumb[0];
 								}
