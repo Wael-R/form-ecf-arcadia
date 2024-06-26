@@ -23,10 +23,46 @@ body
 	}
 }
 
+.large-scroll
+{
+	max-height: 64rem;
+	overflow: auto;
+}
+
 .card-img-top
 {
 	object-fit: cover;
 	height: 200px;
+}
+
+.list-img
+{
+	object-fit: cover;
+	height: 200px;
+	width: 100%;
+	align-content: center;
+}
+
+.main-carousel > .carousel-indicators > button
+{
+	border: 1px solid #555;
+	border-radius: 3px;
+	background-color: #EEE;
+}
+
+.main-carousel
+{
+	height: 500px;
+	border: 1px solid #DDD;
+	background-color: #EEE;
+}
+
+.main-carousel-img
+{
+	object-fit: contain;
+	height: 500px;
+	width: 100%;
+	align-content: center;
 }
 
 .main-card-line
