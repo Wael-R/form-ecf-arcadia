@@ -119,7 +119,7 @@ $sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql-
 						{
 							$cardTitle = htmlspecialchars($animal[1]);
 							$cardButton = "Voir plus";
-							$cardLink = "#todo";
+							$cardLink = "view_animal.php?id=" . $animal[0];
 							$cardDesc = htmlspecialchars($animal[2]);
 
 							$res2 = $sqli->execute_query("SELECT source FROM animalThumbnails WHERE animal = ? ORDER BY animalThumbId ASC LIMIT 1;", [$animal[0]]);
