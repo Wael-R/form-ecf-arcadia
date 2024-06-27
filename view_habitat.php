@@ -127,6 +127,7 @@ if($res3)
 									<div class="col-md-9 card-body d-flex flex-column">
 										<h5 class="card-title main-card-line"><?= htmlspecialchars($animal["name"]) ?></h5>
 										<p class="card-subtitle mb-2 text-body-secondary main-card-line"><?= htmlspecialchars($animal["race"]) ?></p>
+										<p class="card-subtitle mb-2 text-body-secondary main-card-line"><?= htmlspecialchars($animal["health"]) ?></p>
 										<div class="mt-auto d-flex justify-content-end">
 											<a class="btn btn-success" href="/view_animal.php?id=<?= $animal["id"] ?>">Voir</a>
 										</div>
