@@ -76,7 +76,7 @@ $search = $_GET["q"] ?? "";
 											<p class="card-subtitle mb-2 text-body-secondary main-card-line"><?= $animalHealth ?></p>
 											<p class="card-subtitle mb-2 text-body-secondary main-card-line"><?= $animalHabitat ?></p>
 											<div class="mt-auto d-flex justify-content-end">
-												<a class="btn btn-success" href="/view_animal?id=<?= $animalId ?>">Voir</a>
+												<a class="btn btn-success" href="/view_animal.php?id=<?= $animalId ?>">Voir</a>
 											</div>
 										</div>
 									</div>

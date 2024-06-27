@@ -71,7 +71,7 @@ $search = $_GET["q"] ?? "";
 											<h5 class="card-title main-card-line"><?= $habitatTitle ?></h5>
 											<p class="card-text main-card-line"><?= $habitatDesc ?></p>
 											<div class="mt-auto d-flex justify-content-end">
-												<a class="btn btn-success" href="/view_habitat?id=<?= $habitatId ?>">Voir</a>
+												<a class="btn btn-success" href="/view_habitat.php?id=<?= $habitatId ?>">Voir</a>
 											</div>
 										</div>
 									</div>
