@@ -37,7 +37,7 @@ $search = $_GET["q"] ?? "";
 							"SELECT c.count, habitatId, name, description FROM habitats
 								LEFT JOIN (SELECT COUNT(*) AS count FROM habitats WHERE name LIKE ?) AS c ON 1
 								WHERE name LIKE ?
-								ORDER BY name ASC LIMIT ?, ?;",
+								ORDER BY LENGTH(name) ASC, name ASC LIMIT ?, ?;",
 							[$name, $name, ($page - 1) * $pageSize, $pageSize]);
 
 						if($res)

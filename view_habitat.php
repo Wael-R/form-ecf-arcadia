@@ -45,7 +45,7 @@ $res3 = $sqli->execute_query(
 			WHERE animalId = t.animal LIMIT 1
 		)
 		WHERE habitat = ?
-		ORDER BY name ASC",
+		ORDER BY LENGTH(name) ASC, name ASC",
 	[$id]);
 
 if($res3)
