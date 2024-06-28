@@ -44,7 +44,16 @@
   </div>
 </div>
 
+<div class="card editor-card editor-scroll mt-3 pb-0">
+	<label class="mb-3">Animaux populaires</label>
+
+	<div id="animalStatsContainer">
+	</div>
+</div>
+
 <script>
+const animalStatsContainer = document.getElementById("animalStatsContainer");
+const animalStatsData = [];
 const animalProps = {
 	entries: [],
 
@@ -86,17 +95,55 @@ const animalProps = {
 			if(habitat.id == entry.habitat)
 			{
 				option.innerHTML = `(${habitat.title}) ${option.innerHTML}`;
+				entry.habitatName = habitat.title;
 				found = true;
 				return;
 			}
 		});
 
 		if(!found)
+		{
 			option.innerHTML = `(Aucun habitat) ${option.innerHTML}`;
+			entry.habitatName = "";
+		}
 	},
 
 	onLoaded: function(entries) {
 		setupAnimalReports(entries);
+
+		animalStatsData.length = 0;
+		animalStatsData.push(...entries);
+		animalStatsData.sort((a, b) => b.views - a.views);
+
+		animalStatsContainer.innerHTML = "";
+
+		animalStatsData.forEach((animal) => {
+			if(animal.views <= 0)
+				return;
+
+			let div = document.createElement("div");
+			div.classList.add("card", "mb-3", "p-3");
+
+			let head = document.createElement("h5");
+			head.classList.add("card-title", "main-card-line");
+			head.innerHTML = stripHTML(animal.title);
+
+			div.appendChild(head);
+
+			let habitat = document.createElement("p");
+			habitat.classList.add("card-subtitle", "mb-2", "text-body-secondary", "main-card-line");
+			habitat.innerHTML = stripHTML(animal.habitatName);
+			
+			div.appendChild(habitat);
+
+			let views = document.createElement("p");
+			views.classList.add("card-subtitle", "mb-2", "main-card-line");
+			views.innerHTML = animal.views + " vue" + (animal.views == 1 ? "" : "s");
+			
+			div.appendChild(views);
+
+			animalStatsContainer.appendChild(div);
+		});
 	},
 
 	listTarget: "./animalList.php",

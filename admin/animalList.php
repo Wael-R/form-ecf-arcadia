@@ -1,4 +1,5 @@
 <?php
+require_once("../vendor/autoload.php");
 require_once("../server/auth.php");
 require_once("../server/utility.php");
 
@@ -14,6 +15,7 @@ if($_SERVER['REQUEST_METHOD'] != "GET")
 }
 
 $sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
+$mongo = new MongoDB\Client("mongodb://" . $config->mongo->hostname . ":" . $config->mongo->port);
 
 $res = $sqli->execute_query(
 	"SELECT
@@ -58,6 +60,13 @@ while($anim = $res->fetch_row())
 	$foodFood = $anim[14];
 	$foodAmount = $anim[15];
 
+	$stats = $mongo->arcadia->animals->findOne(["id" => strval($id)]);
+
+	if(!$stats)
+		$views = 0;
+	else
+		$views = $stats["views"];
+
 	$key = $keys[$id] ?? count($anims);
 	$keys[$id] = $key;
 
@@ -70,6 +79,7 @@ while($anim = $res->fetch_row())
 		"desc" => $race,
 		"health" => $health,
 		"habitat" => $habitat,
+		"views" => $views,
 	];
 
 	$array["thumbs"] = null;
@@ -87,7 +97,7 @@ while($anim = $res->fetch_row())
 	if($foodId)
 		$array["food"] = ["id" => $foodId, "date" => $foodDate, "food" => $foodFood, "amount" => $foodAmount];
 		
-	$anims[$key] = mergeKeys($array, $anims[$key], "id", "title", "desc", "health", "habitat");
+	$anims[$key] = mergeKeys($array, $anims[$key], "id", "title", "desc", "health", "habitat", "views");
 }
 
 echo(json_encode($anims));
