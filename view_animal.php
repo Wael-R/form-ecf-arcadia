@@ -1,6 +1,9 @@
 <?php
+require_once("./vendor/autoload.php");
 require_once("./server/auth.php");
 $sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
+$mongo = new MongoDB\Client("mongodb://" . $config->mongo->hostname . ":" . $config->mongo->port);
+
 $id = $_GET["id"] ?? 0;
 
 if($id <= 0)
@@ -43,6 +46,13 @@ if($res2)
 	while($thumb = $res2->fetch_row())
 		$animalThumbs[] = $thumb[0];
 }
+
+$anim = $mongo->arcadia->animals->findOne(["id" => $id]);
+
+if(!$anim)
+	$mongo->arcadia->animals->insertOne(["id" => $id, "views" => 1]);
+else
+	$mongo->arcadia->animals->updateOne(["id" => $id], ["\$set" => ["views" => $anim["views"] + 1]]);
 ?>
 
 <!DOCTYPE html>
