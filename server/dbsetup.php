@@ -7,6 +7,7 @@ if(php_sapi_name() != "cli")
 	exit();
 }
 
+require_once("../vendor/autoload.php");
 require_once("./auth.php");
 
 // * SOURCE: https://gist.github.com/scribu/5877523
@@ -21,12 +22,8 @@ function prompt_silent($prompt = "") {
 	return rtrim($input, "\r\n");
 }
 
-echo("This will recreate all database tables and overwrite their data.\nType 'OK' to proceed...\n\n");
+echo("Step 1: Configure credentials and hosts\n\n");
 
-if(readline() != "OK")
-	exit("\nCanceled setup.\n\n");
-
-echo("\n");
 $hostname = readline("Enter the MySQL server hostname (localhost): ");
 if($hostname == "")
 	$hostname = "localhost";
@@ -41,9 +38,20 @@ $username = readline("Enter the MySQL server username (root): ");
 if($username == "")
 	$username = "root";
 
-$password = prompt_silent("\nEnter the MySQL server password (1234): ");
+echo("\n");
+$password = prompt_silent("Enter the MySQL server password (1234): ");
 if($password == "")
 	$password = "1234";
+
+echo("\n");
+$mongoHostname = readline("Enter the MongoDB server hostname (localhost): ");
+if($mongoHostname == "")
+	$mongoHostname = "localhost";
+
+echo("\n");
+$mongoPort = readline("Enter the MongoDB server host port (27017): ");
+if($mongoPort == "")
+	$mongoPort = "27017";
 
 $mailHostname = "";
 $mailPort = "";
@@ -97,6 +105,10 @@ $config = [
 		"username" => $username,
 		"password" => $password,
 	],
+	"mongo" => [
+		"hostname" => $mongoHostname,
+		"port" => $mongoPort
+	],
 	"mail" => [
 		"hostname" => $mailHostname,
 		"port" => $mailPort,
@@ -112,7 +124,18 @@ $json = json_encode($config, JSON_PRETTY_PRINT);
 
 file_put_contents($path, $json);
 
+echo("\nCredentials saved.\n\n");
+
+echo("Step 2: Create databases\nThis will recreate all database tables and overwrite their data.\nType 'OK' to proceed...\n\n");
+
+if(readline() != "OK")
+	exit("\nCanceled database creation.\n\n");
+
 $config = json_decode($json); // a bit silly, turns the array into objects
+
+$mongo = new MongoDB\Client("mongodb://" . $config->mongo->hostname . ":" . $config->mongo->port);
+$mongo->dropDatabase("arcadia");
+$mongo->arcadia->animals->createIndex(["views" => -1]);
 
 $sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, null, $config->sql->port);
 
