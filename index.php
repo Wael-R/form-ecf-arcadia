@@ -1,6 +1,8 @@
 <?php
 require_once("./server/auth.php");
 
+updateCSRFToken();
+
 $sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
 ?>
 
@@ -143,12 +145,129 @@ $sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql-
 		</div>
 
 		<hr class="spacer">
-	
+
 		<div class="main-row reviews px-2 px-sm-5">
 			<h2>Avis</h2>
-			<div class="reviews-inner">
-				// todo
+			<button class="btn btn-success" id="reviewAddButton">Soumettre un avis</button>
+
+			<div class="d-none card editor-card" id="reviewFormDiv">
+					<form id="reviewForm" action="javascript:void(0);" autocomplete="off">
+						<div class="mb-3">
+							<label for="reviewUsername" class="form-label">Nom</label>
+							<input type="name" class="form-control" id="reviewUsername" required>
+						</div>
+
+						<div class="mb-3">
+							<label for="reviewContent" class="form-label">Avis</label>
+							<textarea class="form-control" id="reviewContent" rows="3" required></textarea>
+						</div>
+
+						<button id="reviewSubmitButton" class="btn btn-success" type="submit">Soumettre l'avis</button>
+						<button id="reviewCancelButton" class="btn btn-secondary" type="button">Annuler</button>
+					</form>
 			</div>
+
+			<p class="login-message" id="reviewMessage"></p>
+
+			<div class="card mt-3 p-3 pb-0 reviews-inner large-scroll" id="reviewContainer">
+				<?php
+				$res = $sqli->execute_query("SELECT name, text FROM reviews WHERE validated ORDER BY date DESC;");
+
+				$success = false;
+
+				if($res)
+				{
+					while($review = $res->fetch_row())
+					{
+						if(!$success)
+							$success = true;
+
+						$name = htmlspecialchars($review[0]);
+						$content = str_replace("\n", "<br>", htmlspecialchars($review[1]));
+
+						?>
+						<div class="card card-body mb-3 p-3">
+							<h5 class="card-title"><?= $name ?></h5>
+							<p class="card-text"><?= $content ?></p>
+						</div>
+						<?php
+					}
+				}
+
+				if(!$success):
+				?>
+				Aucun avis
+				<?php endif; ?>
+			</div>
+
+			<script>
+				const reviewContainer = document.getElementById("reviewContainer");
+				const reviewFormDiv = document.getElementById("reviewFormDiv");
+				const reviewMessage = document.getElementById("reviewMessage");
+
+				const reviewAddBtn = document.getElementById("reviewAddButton");
+				const reviewSubmitBtn = document.getElementById("reviewSubmitButton");
+				const reviewCancelBtn = document.getElementById("reviewCancelButton");
+
+				const reviewNameInput = document.getElementById("reviewUsername");
+				const reviewContentInput = document.getElementById("reviewContent");
+
+				function resetReviewForm()
+				{
+					reviewNameInput.value = "";
+					reviewContentInput.value = "";
+					reviewFormDiv.classList.add("d-none");
+					reviewAddBtn.classList.remove("d-none");
+				}
+
+				reviewAddBtn.addEventListener("click", (evt) => {
+					evt.preventDefault();
+					reviewFormDiv.classList.remove("d-none");
+					reviewAddBtn.classList.add("d-none");
+				});
+				
+				reviewCancelBtn.addEventListener("click", (evt) => {
+					resetReviewForm();
+				});
+
+				reviewFormDiv.addEventListener("submit", (evt) => {
+					const target = "reviewSubmit.php";
+
+					let request = new XMLHttpRequest();
+
+					let data = new FormData();
+
+					data.append("name", reviewNameInput.value);
+					data.append("review", reviewContentInput.value);
+
+					reviewSubmitBtn.setAttribute("disabled", "");
+					reviewCancelBtn.setAttribute("disabled", "");
+
+					request.onreadystatechange = (ev) => {
+						if(request.readyState == 4)
+						{
+							reviewSubmitBtn.removeAttribute("disabled");
+							reviewCancelBtn.removeAttribute("disabled");
+
+							if(request.status == 400 || request.status == 401 || request.status == 403)
+								reviewMessage.innerHTML = "Erreur: " + stripHTML(request.responseText);
+							else if(request.status == 200)
+							{
+								reviewMessage.innerHTML = "Avis soumis avec succès";
+								resetReviewForm();
+								reviewAddBtn.classList.add("d-none");
+							}
+							else
+								reviewMessage.innerHTML = "Erreur inconnue (" + request.status + ")";
+						}
+					};
+
+					request.open("POST", target);
+					request.setRequestHeader("Auth-Token", "<?= getCSRFToken() ?>");
+
+					request.send(data);
+				});
+			</script>
 		</div>
 	</div>
 
