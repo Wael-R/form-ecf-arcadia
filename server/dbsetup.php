@@ -240,7 +240,15 @@ CREATE TABLE animalFoodReports (
 	FOREIGN KEY (animal) REFERENCES animals(animalId) ON DELETE CASCADE
 );
 
--- todo: add reviews
+DROP TABLE IF EXISTS reviews;
+CREATE TABLE reviews (
+	reviewId INT AUTO_INCREMENT,
+	date DATETIME NOT NULL DEFAULT NOW(),
+	name VARCHAR(255) NOT NULL,
+	text TEXT(2048) NOT NULL,
+	validated BOOLEAN NOT NULL DEFAULT 0,
+	PRIMARY KEY (reviewId)
+);
 ";
 
 $res = $sqli->multi_query($req);
