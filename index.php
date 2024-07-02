@@ -12,6 +12,7 @@ $sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql-
 	<?php $title = ""; include("./components/head.php"); ?>
 </head>
 <body>
+	<script src="/utility.js"></script>
 	<div class="main-container">
 		<?php include("./components/navbar.php"); ?>
 
