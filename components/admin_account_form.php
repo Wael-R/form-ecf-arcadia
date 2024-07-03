@@ -62,7 +62,7 @@
 				if(http.readyState == 4)
 				{
 					if(http.status == 400 || http.status == 401 || http.status == 403)
-						loginMessage.innerHTML = "Erreur: " + http.responseText; // todo? strip html tags from here
+						loginMessage.innerHTML = "Erreur: " + stripHTML(http.responseText);
 					else if(http.status == 200)
 					{
 						loginMessage.innerHTML = "Compte crée avec succès";
