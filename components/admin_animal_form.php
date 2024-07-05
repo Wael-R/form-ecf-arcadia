@@ -44,9 +44,13 @@
   </div>
 </div>
 
-<div class="card editor-card editor-scroll mt-3 pb-0">
-	<label class="mb-3">Animaux populaires</label>
+<br><br>
 
+<h5 class="fw-bold">Animaux populaires</h5>
+
+<br>
+
+<div class="card editor-card editor-scroll pb-0">
 	<div id="animalStatsContainer">
 	</div>
 </div>
@@ -65,8 +69,6 @@ const animalProps = {
 	altButton: document.getElementById("animalAltButton"),
 
 	onSelect: function(idx) {
-		displayAnimalReports(animalProps.entries[idx] ?? null);
-
 		if(idx !== "" && habitatProps.entries.length > 0)
 		{
 			animalProps.altSelect.options.length = 0;

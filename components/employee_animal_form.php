@@ -130,8 +130,6 @@
 					amountField.value = "Quantité...";
 					dateField.value = getDateString(new Date());
 					dateField.max = dateField.value;
-
-					displayAnimalFoodReports(anim);
 				}
 			});
 

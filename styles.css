@@ -160,3 +160,13 @@ body
 		width: fit-content;
 	}
 }
+
+.date-number
+{
+	width: 4em;
+}
+
+.date-month
+{
+	width: 6em;
+}

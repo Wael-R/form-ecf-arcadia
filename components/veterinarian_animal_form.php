@@ -147,9 +147,6 @@
 					commentField.value = "";
 					dateField.value = getDateString(new Date());
 					dateField.max = dateField.value;
-
-					displayAnimalReports(anim);
-					displayAnimalFoodReports(anim);
 				}
 			});
 

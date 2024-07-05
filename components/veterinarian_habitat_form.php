@@ -113,10 +113,7 @@
 				let habitat = vetHabitatData[index];
 
 				if(habitat)
-				{
 					commentField.value = "Commentaire...";
-					displayHabitatComments(habitat);
-				}
 			});
 
 			vetHabitatForm.addEventListener("submit", (evt) =>

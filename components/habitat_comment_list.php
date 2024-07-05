@@ -1,5 +1,16 @@
-<div class="card editor-card editor-scroll mt-3 d-none" id="habitatComments">
-	<label class="mb-2">Commentaires du vétérinaire</label>
+<br><br>
+
+<h5 class="fw-bold">Commentaires du vétérinaire</h5>
+
+<br>
+
+<div class="card editor-card editor-scroll d-none" id="habitatComments">
+	<div class="mb-2">
+		<label class="form-label" for="habitatFilterSelect">Habitat</label>
+		<select class="form-control" id="habitatFilterSelect">
+		</select>
+	</div>
+
 	<div class="form-check mb-2">
 		<input class="form-check-input" type="checkbox" id="habitatFilterSelected" checked>
 		<label class="form-check-label" for="habitatFilterSelected">Habitat selectionné uniquement</label>
@@ -12,12 +23,15 @@
 <script>
 	const commentsDiv = document.getElementById("habitatComments");
 	const commentContainer = document.getElementById("habitatCommentContainer");
-	const commentFilterSelect = document.getElementById("habitatFilterSelected");
+	const commentFilterSelect = document.getElementById("habitatFilterSelect");
+	const commentFilterSelected = document.getElementById("habitatFilterSelected");
 	const comments = [];
+	const commentHabitats = [];
 
 	let commentHabitat = null;
 
-	commentFilterSelect.addEventListener("change", (evt) => { displayComments(); });
+	commentFilterSelected.addEventListener("change", (evt) => { displayComments(); });
+	commentFilterSelect.addEventListener("change", (evt) => { displayHabitatComments(commentHabitats[commentFilterSelect.value]); });
 
 	function setupHabitatComments(habitats)
 	{
@@ -27,8 +41,19 @@
 		{
 			commentsDiv.classList.remove("d-none");
 			comments.length = 0;
+			commentHabitats.length = 0;
+			commentFilterSelect.options.length = 0;
 
-			habitats.forEach((habitat) => {
+			habitats.forEach((habitat, idx) => {
+				commentHabitats.push(habitat);
+
+				let option = document.createElement("option");
+				option.value = idx;
+				option.innerHTML = stripHTML(habitat.title);
+
+				commentFilterSelect.options.length++;
+				commentFilterSelect.options[commentFilterSelect.options.length - 1] = option;
+
 				habitat.comments.forEach((comment) => {
 					let dupe = {...comment};
 					dupe.habitat = habitat;
@@ -38,6 +63,8 @@
 			});
 
 			comments.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+			displayHabitatComments(commentHabitats[0]);
 		}
 	}
 
@@ -52,12 +79,10 @@
 	{
 		commentContainer.innerHTML = "";
 
-		commentFilterSelect.disabled = !commentHabitat;
-
 		let first = true;
 
 		comments.forEach((comment) => {
-			if(commentFilterSelect.checked && commentHabitat && comment.habitat != commentHabitat)
+			if(commentFilterSelected.checked && commentHabitat && comment.habitat != commentHabitat)
 				return;
 
 			let div = document.createElement("div");

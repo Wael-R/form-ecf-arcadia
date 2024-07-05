@@ -1,18 +1,35 @@
-<div class="card editor-card editor-scroll mt-3 d-none" id="animalReports">
-	<label class="mb-2">Avis passés du vétérinaire</label>
-	<div class="btn-group btn-group-sm row align-items-center mb-2 px-3" role="group" aria-label="Filtrer les avis du vétérinaire">
-		<label class="col-auto btn btn-success" for="animalFilterFrom">Filtrer du</label>
-		<input class="col-auto btn btn-success" type="datetime-local" id="animalFilterFrom">
+<script src="/datepicker.js"></script>
 
-		<label class="col-auto btn btn-success" for="animalFilterTo">au</label>
-		<input class="col-auto btn btn-success" type="datetime-local" id="animalFilterTo">
-		
-		<button class="col-auto btn btn-outline-success" type="button" id="animalFilterReset">X</button>
+<br><br>
+
+<h5 class="fw-bold">Avis passés du vétérinaire</h5>
+
+<br>
+
+<div class="card editor-card editor-scroll d-none" id="animalReports">
+	<div class="mb-2">
+		<label class="form-label" for="animalFilterSelect">Animal</label>
+		<select class="form-control" id="animalFilterSelect">
+		</select>
 	</div>
 
-	<div class="form-check mb-2">
+	<div class="form-check mb-3">
 		<input class="form-check-input" type="checkbox" id="animalFilterSelected" checked>
 		<label class="form-check-label" for="animalFilterSelected">Animal selectionné uniquement</label>
+	</div>
+
+	<div class="row mb-2 align-items-center">
+		<label class="col-4 col-md-2 form-label" for="animalFilterFromButton">Date de début : </label>
+		<div class="col-9 col-md-4">
+			<?php $datePickerPrefix = "animalFilterFrom"; include("date_picker.php"); ?>
+		</div>
+	</div>
+
+	<div class="row mb-3 align-items-center">
+		<label class="col-4 col-md-2 form-label" for="animalFilterToButton">Date de fin : </label>
+		<div class="col-9 col-md-4">
+			<?php $datePickerPrefix = "animalFilterTo"; include("date_picker.php"); ?>
+		</div>
 	</div>
 
 	<div id="animalReportContainer">
@@ -22,23 +39,52 @@
 <script>
 	const reportsDiv = document.getElementById("animalReports");
 	const reportContainer = document.getElementById("animalReportContainer");
-	const reportFilterFrom = document.getElementById("animalFilterFrom");
-	const reportFilterTo = document.getElementById("animalFilterTo");
+	const reportFilterSelect = document.getElementById("animalFilterSelect");
+	const reportFilterSelected = document.getElementById("animalFilterSelected");
+	const reportFilterFrom = animalFilterFromDateProps;
+	const reportFilterTo = animalFilterToDateProps;
 	const reportFilterReset = document.getElementById("animalFilterReset");
-	const reportFilterSelect = document.getElementById("animalFilterSelected");
 	const reports = [];
+	const reportAnimals = [];
+
+	const reportTimeFormat = {
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+		hour: "numeric",
+		minute: "numeric"
+	};
 
 	let reportAnimal = null;
 
-	reportFilterFrom.addEventListener("change", (evt) => { displayReports(); });
-	reportFilterTo.addEventListener("change", (evt) => { displayReports(); });
-	reportFilterSelect.addEventListener("change", (evt) => { displayReports(); });
-	reportFilterReset.addEventListener("click", (evt) =>
-	{
-		reportFilterFrom.value = "";
-		reportFilterTo.value = "";
+	const reportFrom = new Date();
+	reportFrom.setDate(reportFrom.getDate() - 7);
+
+	let reportFromDate = reportFrom;
+	let reportToDate = new Date();
+
+	reportFilterFrom.onChange = (from, to) => {
+		reportFilterFrom.button.innerHTML = to.toLocaleString("fr", reportTimeFormat);
+		reportFromDate = to;
+		setDateMinimum(reportFilterTo, to);
 		displayReports();
-	});
+	};
+
+	reportFilterTo.onChange = (from, to) => {
+		reportFilterTo.button.innerHTML = to.toLocaleString("fr", reportTimeFormat);
+		reportToDate = to;
+		setDateMaximum(reportFilterFrom, to);
+		displayReports();
+	};
+
+	setupDatePicker(reportFilterFrom);
+	setupDatePicker(reportFilterTo);
+
+	setDate(reportFilterFrom, reportFromDate);
+	setDate(reportFilterTo, reportToDate);
+
+	reportFilterSelected.addEventListener("change", (evt) => { displayReports(); });
+	reportFilterSelect.addEventListener("change", (evt) => { displayAnimalReports(reportAnimals[reportFilterSelect.value]); });
 
 	function setupAnimalReports(animals)
 	{
@@ -48,8 +94,19 @@
 		{
 			reportsDiv.classList.remove("d-none");
 			reports.length = 0;
+			reportAnimals.length = 0;
+			reportFilterSelect.options.length = 0;
 
-			animals.forEach((animal) => {
+			animals.forEach((animal, idx) => {
+				reportAnimals.push(animal);
+
+				let option = document.createElement("option");
+				option.value = idx;
+				option.innerHTML = stripHTML(animal.title);
+
+				reportFilterSelect.options.length++;
+				reportFilterSelect.options[reportFilterSelect.options.length - 1] = option;
+
 				animal.reports.forEach((report) => {
 					let dupe = {...report};
 					dupe.animal = animal;
@@ -59,14 +116,15 @@
 			});
 
 			reports.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+			displayAnimalReports(reportAnimals[0]);
 		}
 	}
 
 	function displayAnimalReports(animal)
 	{
-		reportFilterFrom.value = "";
-		reportFilterTo.value = "";
-		reportFilterReset.classList.add("d-none");
+		setDate(reportFilterFrom, reportFrom);
+		setDate(reportFilterTo, new Date());
 
 		reportAnimal = animal;
 
@@ -76,57 +134,15 @@
 	function displayReports()
 	{
 		let dateNow = new Date();
-		let dateFrom = new Date(reportFilterFrom.value);
-		let dateTo = new Date(reportFilterTo.value);
-
-		reportFilterReset.classList.remove("d-none");
-
-		if(!dateFrom.getTime())
-		{
-			dateFrom = new Date(0);
-			if(!dateTo.getTime())
-			{
-				reportFilterReset.classList.add("d-none");
-				dateTo = dateNow;
-			}
-		}
-		else
-		{
-			if(!dateTo.getTime())
-			{
-				dateTo = dateNow;
-			}
-			else if(dateTo.getTime() < dateFrom.getTime())
-			{
-				let to = dateTo;
-				dateTo = dateFrom;
-				dateFrom = dateTo;
-
-				let to2 = reportFilterTo.value;
-				reportFilterTo.value = reportFilterFrom.value;
-				reportFilterFrom.value = to2;
-			}
-			else if(dateTo.getTime() == dateFrom.getTime())
-			{
-				dateFrom = null;
-				dateTo = null;
-			}
-		}
-
-		reportFilterTo.min = getDateString(dateFrom);
-		reportFilterTo.max = getDateString(dateNow);
-
-		reportFilterFrom.min = getDateString(new Date(0));
-		reportFilterFrom.max = getDateString(dateTo);
+		let dateFrom = getDate(reportFilterFrom);
+		let dateTo = getDate(reportFilterTo);
 
 		reportContainer.innerHTML = "";
-
-		reportFilterSelect.disabled = !reportAnimal;
 
 		let first = true;
 
 		reports.forEach((report) => {
-			if(reportFilterSelect.checked && reportAnimal && report.animal != reportAnimal)
+			if(reportFilterSelected.checked && reportAnimal && report.animal != reportAnimal)
 				return;
 
 			let reportDate = new Date(report.date);
@@ -142,16 +158,8 @@
 			else
 				div.classList.add("mt-3");
 
-			const format = {
-				year: "numeric",
-				month: "long",
-				day: "numeric",
-				hour: "numeric",
-				minute: "numeric"
-			};
-
 			let date = document.createElement("p");
-			date.innerHTML = "<i>Pour <b>" + stripHTML(report.animal.title) + "</b>, passé le " + reportDate.toLocaleString("fr", format) + "</i>";
+			date.innerHTML = "<i>Pour <b>" + stripHTML(report.animal.title) + "</b>, passé le " + reportDate.toLocaleString("fr", reportTimeFormat) + "</i>";
 
 			div.appendChild(date);
 
