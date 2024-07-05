@@ -128,7 +128,7 @@ const animalProps = {
 
 			let head = document.createElement("h5");
 			head.classList.add("card-title", "main-card-line");
-			head.innerHTML = stripHTML(animal.title);
+			head.innerHTML = `<a class="text-success" href="/view_animal.php?id=${animal.id}">` + stripHTML(animal.title) + "</a>";
 
 			div.appendChild(head);
 
