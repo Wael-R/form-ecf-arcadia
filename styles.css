@@ -65,6 +65,19 @@ body
 	align-content: center;
 }
 
+@media (max-width: 768px)
+{
+	.main-carousel
+	{
+		height: 250px;
+	}
+
+	.main-carousel-img
+	{
+		height: 250px;
+	}
+}
+
 .main-card-line
 {
 	width: 100%;
