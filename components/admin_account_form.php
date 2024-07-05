@@ -30,7 +30,9 @@
 			<p class="login-message" id="loginMessage"></p>
 		</div>
 
-		<button type="submit" class="btn btn-success">Créer un compte</button>
+		<div class="col-auto fit-md">
+			<button type="submit" class="btn btn-success w-100">Créer un compte</button>
+		</div>
 	</form>
 </div>
 

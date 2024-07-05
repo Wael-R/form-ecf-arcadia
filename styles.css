@@ -151,3 +151,12 @@ body
 {
 	margin-top: 1em;
 }
+
+@media (min-width: 768px)
+{
+	.fit-md
+	{
+		display: inline-block;
+		width: fit-content;
+	}
+}

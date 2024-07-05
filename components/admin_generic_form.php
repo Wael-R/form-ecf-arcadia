@@ -45,11 +45,17 @@
 			<p class="login-message" id="<?= $formPrefix ?>Message"></p>
 		</div>
 
-		<button type="submit" class="btn btn-success" id="<?= $formPrefix ?>Button" disabled></button>
+		<div class="col-auto fit-md">
+			<button type="submit" class="btn btn-success w-100" id="<?= $formPrefix ?>Button" disabled></button>
+		</div>
 		<?php if($formUseAltButton): ?>
-		<button type="button" class="btn btn-success" id="<?= $formPrefix ?>AltButton" disabled><?= $formAltButtonText ?></button>
+		<div class="col-auto fit-md">
+			<button type="button" class="btn btn-success w-100 mt-1 mt-md-0" id="<?= $formPrefix ?>AltButton" disabled><?= $formAltButtonText ?></button>
+		</div>
 		<?php endif; ?>
-		<button type="button" class="btn btn-danger" id="<?= $formPrefix ?>Delete" data-bs-toggle="modal" data-bs-target="#<?= $formPrefix ?>DeleteModal" disabled><?= $formDelete ?></button>
+		<div class="col-auto fit-md">
+			<button type="button" class="btn btn-danger w-100 mt-1 mt-md-0" id="<?= $formPrefix ?>Delete" data-bs-toggle="modal" data-bs-target="#<?= $formPrefix ?>DeleteModal" disabled><?= $formDelete ?></button>
+		</div>
 	</form>
 </div>
 
