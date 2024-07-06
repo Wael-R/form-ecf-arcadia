@@ -32,8 +32,8 @@
 		</div>
 
 		<div class="mb-3">
-			<label for="animalDate" class="form-label">Date de passage</label>
-			<input type="datetime-local" class="form-control" id="animalDate">
+			<label for="animalDateButton" class="form-label">Date de passage</label>
+			<?php $datePickerPrefix = "animal"; include("date_picker.php"); ?>
 		</div>
 
 		<div class="mb-3">
@@ -64,6 +64,20 @@
 
 			submit.setAttribute("disabled", "");
 			select.setAttribute("disabled", "");
+
+			setupDatePicker(animalDateProps);
+
+			const format = {
+				year: "numeric",
+				month: "long",
+				day: "numeric",
+				hour: "numeric",
+				minute: "numeric"
+			};
+
+			animalDateProps.onChange = (from, to) => {
+				animalDateProps.button.innerHTML = to.toLocaleString("fr", format);
+			};
 
 			let request = new XMLHttpRequest();
 
@@ -128,7 +142,6 @@
 			const foodField = document.getElementById("animalFood");
 			const amountField = document.getElementById("animalFoodAmount");
 			const commentField = document.getElementById("animalComment");
-			const dateField = document.getElementById("animalDate");
 
 			vetGenerateSelectOptions();
 
@@ -145,8 +158,8 @@
 					foodField.value = "Nourriture...";
 					amountField.value = "Quantité...";
 					commentField.value = "";
-					dateField.value = getDateString(new Date());
-					dateField.max = dateField.value;
+					setDate(animalDateProps, new Date());
+					setDateMaximum(animalDateProps, new Date());
 				}
 			});
 
@@ -160,7 +173,7 @@
 				let food = foodField.value;
 				let amount = amountField.value;
 				let comment = commentField.value;
-				let date = dateField.value;
+				let date = getDateString(getDate(animalDateProps));
 
 				let request = new XMLHttpRequest();
 				let data = new FormData();
