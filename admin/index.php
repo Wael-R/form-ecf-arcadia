@@ -436,6 +436,7 @@ updateCSRFToken();
 			});
 		}
 	</script>
+
 	<div class="main-container">
 		<?php include("../components/navbar.php"); ?>
 
@@ -448,6 +449,7 @@ updateCSRFToken();
 				<?php
 				if($role == "admin")
 				{
+					echo("<a class=\"text-success fw-bold\" href=\"#scheduleEditor\">Horaires</a> - ");
 					echo("<a class=\"text-success fw-bold\" href=\"#accountEditor\">Comptes</a> - ");
 					echo("<a class=\"text-success fw-bold\" href=\"#serviceEditor\">Services</a> - ");
 					echo("<a class=\"text-success fw-bold\" href=\"#habitatEditor\">Habitats</a> - ");
@@ -478,6 +480,10 @@ updateCSRFToken();
 
 			if($role == "admin")
 			{
+				include("../components/admin_schedule_form.php");
+
+				echo($spacer);
+
 				include("../components/admin_account_form.php");
 
 				echo($spacer);

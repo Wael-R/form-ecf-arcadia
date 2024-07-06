@@ -1,9 +1,33 @@
 <?php
+require_once("./vendor/autoload.php");
 require_once("./server/auth.php");
 
 updateCSRFToken();
 
 $sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
+$mongo = new MongoDB\Client("mongodb://" . $config->mongo->hostname . ":" . $config->mongo->port);
+
+$schedule = $mongo->arcadia->schedule->findOne(["id" => 0]);
+
+$fromTime = 10;
+$toTime = 18;
+$days = 0;
+
+if(!$schedule)
+	$mongo->arcadia->schedule->insertOne(["id" => 0, "from" => $fromTime, "to" => $toTime, "days" => $days]);
+else
+{
+	$fromTime = $schedule["from"];
+	$toTime = $schedule["to"];
+	$days = $schedule["days"];
+}
+
+$daysString = "toute la semaine";
+
+if($days == 1)
+	$daysString = "du lundi au samedi";
+else if($days == 2)
+	$daysString = "du lundi au vendredi";
 ?>
 
 <!DOCTYPE html>
@@ -44,6 +68,13 @@ $sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql-
 			<h2 class="fw-bold">Zoo Arcadia</h2>
 			<p>
 				lorem ipsum, etc. longer placeholder text because //todo just won't cut it! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			</p>
+
+			<br>
+
+			<h5 class="fw-bold">Horaires</h5>
+			<p>
+				Ouvert de <?= $fromTime ?> heures à <?= $toTime ?> heures, <?= $daysString ?>
 			</p>
 		</div>
 
