@@ -22,7 +22,7 @@ $search = $_GET["q"] ?? "";
 					<h2 class="text-success fw-bold">Habitats</h2>
 				</div>
 				<div class="col-12 col-md-4">
-					<input class="form-control" type="text" value="<?= $search ?>" placeholder="Rechercher..." onchange="window.location.href = `?q=${encodeURIComponent(this.value)}`;">
+					<input class="form-control" id="searchInput" type="text" value="<?= $search ?>" placeholder="Rechercher..." onchange="window.location.href = `?q=${encodeURIComponent(this.value)}`;">
 				</div>
 			</div>
 			<br>
