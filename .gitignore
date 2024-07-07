@@ -1,4 +1,11 @@
 
 /vendor
 server/config.json
-/content/uploads
+/content/uploads/habitat/*
+/content/uploads/animal/*
+!/content/uploads/habitat/6dcd0ff5321eaf05167750866f7a62de5e342cc3.jpg
+!/content/uploads/habitat/7c91c7b191362ada407469e817d015b700eb02e4.jpg
+!/content/uploads/habitat/57eec92c0d50207aac419011e0bb777faf450359.png
+!/content/uploads/habitat/79f619d9788a8b03c4a71fc11babbd23a6948836.png
+!/content/uploads/habitat/a0275ac05e969a395d08833b9930163ce0bcd1c7.jpg
+!/content/uploads/habitat/aed91a6c554615e1162ab7f103536fa7d89341c5.jpg
