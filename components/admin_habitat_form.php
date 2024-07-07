@@ -33,10 +33,6 @@ const habitatProps = {
 
 	select: document.getElementById("habitatSelect"),
 
-	onSelect: function(idx) {
-		displayHabitatComments(habitatProps.entries[idx] ?? null);
-	},
-
 	onLoaded: function(entries) {
 		setupHabitatComments(entries);
 	},
