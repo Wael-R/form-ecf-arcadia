@@ -35,6 +35,14 @@ body
 	height: 200px;
 }
 
+@media (min-width: 1024px)
+{
+	.card-img-top
+	{
+		height: 300px;
+	}
+}
+
 .list-img
 {
 	object-fit: cover;
