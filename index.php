@@ -43,13 +43,16 @@ else if($days == 2)
 		<div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
 			<div class="carousel-inner">
 				<div class="carousel-item active">
-					<img src="content/placeholder.png" class="d-block w-100" alt="todo (1)">
+					<img src="content/slide0.jpg" class="d-block w-100" alt="Image de présentation 1">
 				</div>
 				<div class="carousel-item">
-					<img src="content/placeholder.png" class="d-block w-100" alt="todo (2)">
+					<img src="content/slide1.jpg" class="d-block w-100" alt="Image de présentation 2">
 				</div>
 				<div class="carousel-item">
-					<img src="content/placeholder.png" class="d-block w-100" alt="todo (3)">
+					<img src="content/slide2.jpg" class="d-block w-100" alt="Image de présentation 3">
+				</div>
+				<div class="carousel-item">
+					<img src="content/slide3.jpg" class="d-block w-100" alt="Image de présentation 4">
 				</div>
 			</div>
 			<button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
