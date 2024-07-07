@@ -117,6 +117,7 @@ $config = [
 	],
 	"sessionTimeout" => 12,
 	"sessionIPLock" => true,
+	"csrfChecks" => true,
 ];
 
 $path = __DIR__ . "/config.json";

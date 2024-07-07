@@ -58,6 +58,11 @@ function isEmailAddress(string $email): bool
 /** Returns true if the CSRF token sent in the Auth-Token header matches the currently set CSRF token */
 function checkCSRF(): bool
 {
+	global $config;
+
+	if(!$config->csrfChecks)
+		return true;
+
 	$heads = apache_request_headers();
 	$token = $heads["Auth-Token"];
 
