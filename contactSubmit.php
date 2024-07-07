@@ -49,6 +49,14 @@ $res2 = sendMail($employees, "Contact Arcadia: " . $title, "Message de " . htmls
 
 if($res2 != "")
 {
-	http_response_code(400);
-	exit("Erreur lors de l'envoi de l'e-mail");
+	if($res2 == -1)
+	{
+		http_response_code(400);
+		exit("Aucun serveur mail disponible");
+	}
+	else
+	{
+		http_response_code(400);
+		exit("Erreur lors de l'envoi de l'e-mail");
+	}
 }
