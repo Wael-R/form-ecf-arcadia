@@ -154,7 +154,7 @@ function authLogin()
 		$sid = $session[0];
 
 		if($sid)
-			setcookie("session", $sid, ["httponly" => true, "samesite" => true]); //todo? add "secure" => true (needs ssl)
+			setcookie("session", $sid, ["httponly" => true, "samesite" => true]);
 
 		$sqli->execute_query("DELETE FROM sessions WHERE created < DATE_SUB(NOW(), INTERVAL ? HOUR);", [$config->sessionTimeout]);
 	}

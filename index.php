@@ -65,8 +65,6 @@ else if($days == 2)
 			</button>
 		</div>
 
-		<!-- todo? center rows -->
-
 		<div class="main-row presentation px-2 px-sm-5">
 			<h2 class="text-center fw-bold">Zoo Arcadia</h2>
 			<p class="text-center">
@@ -89,7 +87,6 @@ else if($days == 2)
 				<div class="row row-cols-1 row-cols-md-2 g-2 align-items-start justify-content-center">
 					<?php
 						$res = $sqli->execute_query("SELECT serviceId, name, description FROM services ORDER BY serviceId ASC LIMIT 4;");
-						// todo? add a showcase picker to select which services to show in the home page
 
 						if($res)
 						{
@@ -176,7 +173,6 @@ else if($days == 2)
 					}
 				?>
 			</div>
-			<!-- todo? show only the most popular animals -->
 		</div>
 
 		<hr class="spacer">

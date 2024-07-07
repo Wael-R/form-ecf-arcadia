@@ -273,7 +273,7 @@ else
 
 echo("\nDatabase created.\n\n");
 
-$req = "INSERT INTO accounts (userId, email, password, role) VALUES (UUID_TO_BIN(UUID()), ?, ?, 'admin'); -- todo? move this to an actual sql file";
+$req = "INSERT INTO accounts (userId, email, password, role) VALUES (UUID_TO_BIN(UUID()), ?, ?, 'admin');";
 
 $sqli->query("USE arcadia");
 $stmt = $sqli->prepare($req);
