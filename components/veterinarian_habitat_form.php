@@ -29,6 +29,7 @@
 <script>
 	const vetHabitatForm = document.getElementById("habitatForm");
 	const vetHabitatData = [];
+	let vetHabitatSelectReset = false;
 
 	if(vetHabitatForm)
 	{
@@ -83,6 +84,7 @@
 							if(select.value == "")
 								select.value = 0;
 
+							vetHabitatSelectReset = true;
 							select.dispatchEvent(new Event("change"));
 						}
 					}
@@ -107,7 +109,10 @@
 
 			select.addEventListener("change", (evt) =>
 			{
-				messageField.innerHTML = "";
+				if(vetHabitatSelectReset)
+					vetHabitatSelectReset = false;
+				else
+					messageField.innerHTML = "";
 
 				let index = select.value;
 				let habitat = vetHabitatData[index];

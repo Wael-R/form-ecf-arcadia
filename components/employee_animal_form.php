@@ -39,6 +39,7 @@
 <script>
 	const animalFoodForm = document.getElementById("animalFoodForm");
 	const animalFoodData = [];
+	let animalSelectReset = false;
 
 	if(animalFoodForm)
 	{
@@ -107,6 +108,8 @@
 							if(select.value == "")
 								select.value = 0;
 
+							animalSelectReset = true;
+
 							select.dispatchEvent(new Event("change"));
 						}
 					}
@@ -132,7 +135,10 @@
 
 			select.addEventListener("change", (evt) =>
 			{
-				messageField.innerHTML = "";
+				if(animalSelectReset)
+					animalSelectReset = false;
+				else
+					messageField.innerHTML = "";
 
 				let index = select.value;
 				let anim = animalFoodData[index];

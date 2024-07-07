@@ -51,6 +51,7 @@
 <script>
 	const vetForm = document.getElementById("animalForm");
 	const vetData = [];
+	let vetSelectReset = false;
 
 	if(vetForm)
 	{
@@ -120,6 +121,7 @@
 							if(select.value == "")
 								select.value = 0;
 
+							vetSelectReset = true;
 							select.dispatchEvent(new Event("change"));
 						}
 					}
@@ -147,7 +149,10 @@
 
 			select.addEventListener("change", (evt) =>
 			{
-				messageField.innerHTML = "";
+				if(vetSelectReset)
+					vetSelectReset = false;
+				else
+					messageField.innerHTML = "";
 
 				let index = select.value;
 				let anim = vetData[index];

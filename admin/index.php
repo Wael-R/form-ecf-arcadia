@@ -77,6 +77,7 @@ updateCSRFToken();
 						if(onLoaded)
 							onLoaded(entries);
 
+						props._reset = true;
 						select.dispatchEvent(new Event("change"));
 
 						formUpdateFields(props);
@@ -232,7 +233,11 @@ updateCSRFToken();
 
 			select.addEventListener("change", (evt) =>
 			{
-				messageField.innerHTML = "";
+				if(props._reset)
+					props._reset = false;
+				else
+					messageField.innerHTML = "";
+
 				formUpdateFields(props);
 
 				if(onSelect)
