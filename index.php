@@ -68,15 +68,15 @@ else if($days == 2)
 		<!-- todo? center rows -->
 
 		<div class="main-row presentation px-2 px-sm-5">
-			<h2 class="fw-bold">Zoo Arcadia</h2>
-			<p>
+			<h2 class="text-center fw-bold">Zoo Arcadia</h2>
+			<p class="text-center">
 				lorem ipsum, etc. longer placeholder text because //todo just won't cut it! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 			</p>
 
 			<br>
 
-			<h5 class="fw-bold">Horaires</h5>
-			<p>
+			<h5 class="text-center fw-bold">Horaires</h5>
+			<p class="text-center">
 				Ouvert de <?= $fromTime ?> heures à <?= $toTime ?> heures, <?= $daysString ?>
 			</p>
 		</div>
@@ -84,7 +84,7 @@ else if($days == 2)
 		<hr class="spacer">
 
 		<div class="main-row services px-2 px-sm-5">
-			<h2><a class="text-success fw-bold" href="services.php">Services</a></h2>
+			<h2 class="text-center"><a class="text-success fw-bold" href="services.php">Services</a></h2>
 			<div class="container px-2">
 				<div class="row row-cols-1 row-cols-md-2 g-2 align-items-start justify-content-center">
 					<?php
@@ -109,7 +109,7 @@ else if($days == 2)
 		<hr class="spacer">
 
 		<div class="main-row habitats px-2 px-sm-5">
-			<h2><a class="text-success fw-bold" href="habitats.php">Habitats</a></h2>
+			<h2 class="text-center"><a class="text-success fw-bold" href="habitats.php">Habitats</a></h2>
 			<div class="row row-cols-1 row-cols-md-2 g-2 align-items-start justify-content-center">
 				<?php
 					$res = $sqli->execute_query("SELECT habitatId, name, description FROM habitats ORDER BY habitatId ASC LIMIT 4;");
@@ -145,7 +145,7 @@ else if($days == 2)
 		<hr class="spacer">
 
 		<div class="main-row animals px-2 px-sm-5">
-			<h2><a class="text-success fw-bold" href="animals.php">Animaux</a></h2>
+			<h2 class="text-center"><a class="text-success fw-bold" href="animals.php">Animaux</a></h2>
 			<div class="row row-cols-1 row-cols-md-2 g-2 align-items-start justify-content-center">
 				<?php
 					$res = $sqli->execute_query("SELECT animalId, name, race FROM animals WHERE habitat != 0 ORDER BY animalId ASC LIMIT 4;");
@@ -182,7 +182,7 @@ else if($days == 2)
 		<hr class="spacer">
 
 		<div class="main-row reviews px-2 px-sm-5">
-			<h2>Avis</h2>
+			<h2 class="text-center">Avis</h2>
 			<button class="btn btn-success" id="reviewAddButton">Soumettre un avis</button>
 
 			<div class="d-none card editor-card" id="reviewFormDiv">
