@@ -133,6 +133,16 @@ else
 			{
 				$file = $_FILES["source"];
 
+				if($file["error"] > 0)
+				{
+					http_response_code(400);
+
+					if($file["error"] == 1)
+						exit("Fichier trop volumineux");
+					else
+						exit("Erreur lors de l'envoi du fichier (" . $file["error"] . ")");
+				}
+
 				$path = $file["tmp_name"];
 				$ext = strstr($file["name"], ".");
 				$type = mime_content_type($path);
