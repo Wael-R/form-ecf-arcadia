@@ -60,12 +60,28 @@ if($id == 0) // create
 		exit("Cet animal existe déjà");
 	}
 
-	$res2 = $sqli->execute_query("INSERT INTO animals (name, race) VALUES (?, ?);", [$title, $race]);
+	$res2 = $sqli->execute_query("SELECT habitatId FROM habitats LIMIT 1");
 
 	if(!$res2)
 	{
 		http_response_code(400);
 		exit("Erreur inconnue (2," . $sqli->errno . ")");
+	}
+
+	$hab = $res2->fetch_row();
+
+	if(!$hab)
+	{
+		http_response_code(400);
+		exit("Aucun habitat éxiste");
+	}
+
+	$res3 = $sqli->execute_query("INSERT INTO animals (name, race, habitat) VALUES (?, ?, ?);", [$title, $race, $hab[0]]);
+
+	if(!$res3)
+	{
+		http_response_code(400);
+		exit("Erreur inconnue (3," . $sqli->errno . ")");
 	}
 }
 else
@@ -79,7 +95,7 @@ else
 			if(!$res)
 			{
 				http_response_code(400);
-				exit("Erreur inconnue (3," . $sqli->errno . ")");
+				exit("Erreur inconnue (4," . $sqli->errno . ")");
 			}
 
 			$row = $res->fetch_row();
@@ -97,7 +113,7 @@ else
 			if(!$res2)
 			{
 				http_response_code(400);
-				exit("Erreur inconnue (4," . $sqli->errno . ")");
+				exit("Erreur inconnue (5," . $sqli->errno . ")");
 			}
 
 			$res3 = $sqli->execute_query("SELECT animalThumbId FROM animalThumbnails WHERE source = ?;", [$src]);
@@ -105,7 +121,7 @@ else
 			if(!$res3)
 			{
 				http_response_code(400);
-				exit("Erreur inconnue (3," . $sqli->errno . ")");
+				exit("Erreur inconnue (6," . $sqli->errno . ")");
 			}
 
 			if(!$res3->fetch_row())
@@ -121,7 +137,7 @@ else
 			if(!$res)
 			{
 				http_response_code(400);
-				exit("Erreur inconnue (5," . $sqli->errno . ")");
+				exit("Erreur inconnue (7," . $sqli->errno . ")");
 			}
 		}
 	}
@@ -161,7 +177,7 @@ else
 				if(!$res)
 				{
 					http_response_code(400);
-					exit("Erreur inconnue (6," . $sqli->errno . ")");
+					exit("Erreur inconnue (8," . $sqli->errno . ")");
 				}
 
 				if(!$res->fetch_row())
@@ -171,7 +187,7 @@ else
 					if(!$res2)
 					{
 						http_response_code(400);
-						exit("Erreur inconnue (7," . $sqli->errno . ")");
+						exit("Erreur inconnue (9," . $sqli->errno . ")");
 					}
 				}
 
@@ -188,7 +204,7 @@ else
 			if(!$res)
 			{
 				http_response_code(400);
-				exit("Erreur inconnue (8," . $sqli->errno . ")");
+				exit("Erreur inconnue (10," . $sqli->errno . ")");
 			}
 		}
 		else
@@ -198,7 +214,7 @@ else
 			if(!$res)
 			{
 				http_response_code(400);
-				exit("Erreur inconnue (9," . $sqli->errno . ")");
+				exit("Erreur inconnue (11," . $sqli->errno . ")");
 			}
 		}
 	}
