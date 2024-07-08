@@ -1,8 +1,8 @@
 <?php
 require_once("./vendor/autoload.php");
 require_once("./server/auth.php");
-$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
-$mongo = new MongoDB\Client("mongodb://" . $config->mongo->hostname . ":" . $config->mongo->port);
+$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, $config->sql->database, $config->sql->port);
+$mongo = new MongoDB\Client(getMongoQueryString());
 
 $id = $_GET["id"] ?? 0;
 

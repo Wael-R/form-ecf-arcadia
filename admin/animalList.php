@@ -14,8 +14,8 @@ if($_SERVER['REQUEST_METHOD'] != "GET")
 	exit();
 }
 
-$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
-$mongo = new MongoDB\Client("mongodb://" . $config->mongo->hostname . ":" . $config->mongo->port);
+$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, $config->sql->database, $config->sql->port);
+$mongo = new MongoDB\Client(getMongoQueryString());
 
 $res = $sqli->execute_query(
 	"SELECT

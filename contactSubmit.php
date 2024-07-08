@@ -30,7 +30,7 @@ if(strlen($message) < 1)
 	exit("Message invalide");
 }
 
-$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
+$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, $config->sql->database, $config->sql->port);
 
 $res = $sqli->execute_query("SELECT email FROM accounts WHERE role = 'employee';");
 

@@ -22,127 +22,199 @@ function prompt_silent($prompt = "") {
 	return rtrim($input, "\r\n");
 }
 
-echo("Step 1: Configure credentials and hosts\n\n");
+echo("Step 1: Configure credentials and hosts\n");
 
-$hostname = readline("Enter the MySQL server hostname (localhost): ");
-if($hostname == "")
-	$hostname = "localhost";
+$skip = false;
 
-echo("\n");
-$hostport = readline("Enter the MySQL server host port (3306): ");
-if($hostport == "")
-	$hostport = "3306";
-
-echo("\n");
-$username = readline("Enter the MySQL server username (root): ");
-if($username == "")
-	$username = "root";
-
-echo("\n");
-$password = prompt_silent("Enter the MySQL server password (1234): ");
-if($password == "")
-	$password = "1234";
-
-echo("\n");
-$mongoHostname = readline("Enter the MongoDB server hostname (localhost): ");
-if($mongoHostname == "")
-	$mongoHostname = "localhost";
-
-echo("\n");
-$mongoPort = readline("Enter the MongoDB server host port (27017): ");
-if($mongoPort == "")
-	$mongoPort = "27017";
-
-$mailHostname = "";
-$mailPort = "";
-$mailUsername = "";
-$mailPassword = "";
-
-echo("\n");
-$mailHostname = readline("Enter the email SMTP server hostname: ");
-if($mailHostname == "")
-	echo("No SMTP server set; no emails will be sent\n");
-else
+if(is_file(__DIR__ . "/config.json"))
 {
+	echo("A config file already exists, type 'SKIP' to keep it as is...\n\n");
+	if(readline() == "SKIP")
+		$skip = true;
+}
+else
 	echo("\n");
-	$mailPort = readline("Enter the email SMTP server port (587): ");
-	if($mailPort == "")
-		$mailPort = "587";
 
-	while(true)
+if(!$skip)
+{
+	$hostname = readline("Enter the MySQL server hostname (localhost): ");
+	if($hostname == "")
+		$hostname = "localhost";
+
+	echo("\n");
+	$hostport = readline("Enter the MySQL server host port (3306): ");
+	if($hostport == "")
+		$hostport = "3306";
+
+	echo("\n");
+	$database = readline("Enter the MySQL database name (arcadia): ");
+	if($database == "")
+		$database = "arcadia";
+		
+	echo("\n");
+	$username = readline("Enter the MySQL server username (root): ");
+	if($username == "")
+		$username = "root";
+
+	echo("\n");
+	$password = prompt_silent("Enter the MySQL server password (1234): ");
+	if($password == "")
+		$password = "1234";
+
+	echo("\n");
+	$mongoRemote = readline("Connect to a remote MongoDB server? (Enter for NO, type anything for YES): ");
+	if($mongoRemote == "")
+		$mongoRemote = false;
+	else
+		$mongoRemote = true;
+
+	echo("\n");
+	$mongoHostname = readline("Enter the MongoDB server hostname (localhost): ");
+	if($mongoHostname == "")
+		$mongoHostname = "localhost";
+
+	if(!$mongoRemote)
 	{
 		echo("\n");
-		$mailUsername = readline("Enter the SMTP email to use: ");
+		$mongoPort = readline("Enter the MongoDB server host port (27017): ");
+		if($mongoPort == "")
+			$mongoPort = "27017";
 
-		if(!isEmailAddress($mailUsername))
-			echo("Invalid email address");
-		else
-			break;
+		$mongoUsername = "";
+		$mongoPassword = "";
+	}
+	else
+	{
+		$mongoPort = "";
+
+		echo("\n");
+		$mongoUsername = readline("Enter the MongoDB server username (root): ");
+		if($mongoUsername == "")
+			$mongoUsername = "root";
+
+		echo("\n");
+		$mongoPassword = readline("Enter the MongoDB server password (1234): ");
+		if($mongoPassword == "")
+			$mongoPassword = "1234";
 	}
 
-	while(true)
+	$mailHostname = "";
+	$mailPort = "";
+	$mailUsername = "";
+	$mailPassword = "";
+
+	echo("\n");
+	$mailHostname = readline("Enter the email SMTP server hostname: ");
+	if($mailHostname == "")
+		echo("No SMTP server set; no emails will be sent\n");
+	else
 	{
-		$mailPassword = prompt_silent("\nEnter the SMTP password to use: ");
+		echo("\n");
+		$mailPort = readline("Enter the email SMTP server port (587): ");
+		if($mailPort == "")
+			$mailPort = "587";
 
-		if(strlen($mailPassword) < 1)
-			echo("Invalid password");
-		else
+		while(true)
 		{
-			$con = prompt_silent("Confirm password: ");
+			echo("\n");
+			$mailUsername = readline("Enter the SMTP email to use: ");
 
-			if($con != $mailPassword)
-				echo("Passwords don't match\n");
+			if(!isEmailAddress($mailUsername))
+				echo("Invalid email address");
 			else
 				break;
 		}
+
+		while(true)
+		{
+			$mailPassword = prompt_silent("\nEnter the SMTP password to use: ");
+
+			if(strlen($mailPassword) < 1)
+				echo("Invalid password");
+			else
+			{
+				$con = prompt_silent("Confirm password: ");
+
+				if($con != $mailPassword)
+					echo("Passwords don't match\n");
+				else
+					break;
+			}
+		}
 	}
+
+	$config = [
+		"sql" => [
+			"hostname" => $hostname,
+			"port" => $hostport,
+			"database" => $database,
+			"username" => $username,
+			"password" => $password,
+		],
+		"mongo" => [
+			"hostname" => $mongoHostname,
+			"port" => $mongoPort,
+			"remote" => $mongoRemote,
+			"username" => $mongoUsername,
+			"password" => $mongoPassword,
+		],
+		"mail" => [
+			"hostname" => $mailHostname,
+			"port" => $mailPort,
+			"username" => $mailUsername,
+			"password" => $mailPassword,
+		],
+		"sessionTimeout" => 12,
+		"sessionIPLock" => true,
+		"csrfChecks" => true,
+	];
+
+	$path = __DIR__ . "/config.json";
+	$json = json_encode($config, JSON_PRETTY_PRINT);
+
+	file_put_contents($path, $json);
+
+	echo("\nCredentials saved.\n\n");
+	
+	$config = json_decode($json); // a bit silly, turns the array into objects
 }
-
-$config = [
-	"sql" => [
-		"hostname" => $hostname,
-		"port" => $hostport,
-		"username" => $username,
-		"password" => $password,
-	],
-	"mongo" => [
-		"hostname" => $mongoHostname,
-		"port" => $mongoPort
-	],
-	"mail" => [
-		"hostname" => $mailHostname,
-		"port" => $mailPort,
-		"username" => $mailUsername,
-		"password" => $mailPassword,
-	],
-	"sessionTimeout" => 12,
-	"sessionIPLock" => true,
-	"csrfChecks" => true,
-];
-
-$path = __DIR__ . "/config.json";
-$json = json_encode($config, JSON_PRETTY_PRINT);
-
-file_put_contents($path, $json);
-
-echo("\nCredentials saved.\n\n");
+else
+	$config = json_decode(file_get_contents(__DIR__ . "/config.json"));
 
 echo("Step 2: Create databases\nThis will recreate all database tables and overwrite their data.\nType 'OK' to proceed...\n\n");
 
 if(readline() != "OK")
 	exit("\nCanceled database creation.\n\n");
 
-$config = json_decode($json); // a bit silly, turns the array into objects
-
-$mongo = new MongoDB\Client("mongodb://" . $config->mongo->hostname . ":" . $config->mongo->port);
-$mongo->dropDatabase("arcadia");
+$mongo = new MongoDB\Client(getMongoQueryString());
+$mongo->arcadia->dropCollection("animals");
+$mongo->arcadia->dropCollection("schedule");
 $mongo->arcadia->animals->createIndex(["views" => -1]);
 
 $sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, null, $config->sql->port);
 
-$req = "CREATE DATABASE IF NOT EXISTS arcadia;
-USE arcadia;
+$res = $sqli->execute_query("CREATE DATABASE IF NOT EXISTS `" . str_replace("`", "", $config->sql->database) . "`;");
+// technically, probably injection prone... but why would you inject sql while deploying?
+// either way, using parameters is not possible for create database statements and some web servers require specific database name prefixes
 
+if($res)
+{
+	$res = $sqli->execute_query("USE `" . str_replace("`", "", $config->sql->database) . "`;");
+
+	if(!$res)
+	{
+		echo("Error using database: " . $sqli->error . "\n\n");
+		return;
+	}
+}
+else
+{
+	echo("Error creating database: " . $sqli->error . "\n\n");
+	return;
+}
+
+$req = "
+DROP TABLE IF EXISTS sessions;
 DROP TABLE IF EXISTS accounts;
 CREATE TABLE accounts (
 	userId BINARY(16) NOT NULL UNIQUE,
@@ -152,7 +224,6 @@ CREATE TABLE accounts (
 	PRIMARY KEY (userId)
 );
 
-DROP TABLE IF EXISTS sessions;
 CREATE TABLE sessions (
 	sessionId INT AUTO_INCREMENT,
 	token BINARY(16) NOT NULL UNIQUE,
@@ -171,6 +242,12 @@ CREATE TABLE services (
 	PRIMARY KEY (serviceId)
 );
 
+DROP TABLE IF EXISTS animalThumbnails;
+DROP TABLE IF EXISTS animalReports;
+DROP TABLE IF EXISTS animalFoodReports;
+DROP TABLE IF EXISTS animals;
+DROP TABLE IF EXISTS habitatThumbnails;
+DROP TABLE IF EXISTS habitatComments;
 DROP TABLE IF EXISTS habitats;
 CREATE TABLE habitats (
 	habitatId INT AUTO_INCREMENT,
@@ -179,7 +256,6 @@ CREATE TABLE habitats (
 	PRIMARY KEY (habitatId)
 );
 
-DROP TABLE IF EXISTS habitatThumbnails;
 CREATE TABLE habitatThumbnails (
 	habitatThumbId INT AUTO_INCREMENT,
 	habitat INT NOT NULL,
@@ -188,7 +264,6 @@ CREATE TABLE habitatThumbnails (
 	FOREIGN KEY (habitat) REFERENCES habitats(habitatId) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS habitatComments;
 CREATE TABLE habitatComments (
 	habitatCommentId INT AUTO_INCREMENT,
 	habitat INT NOT NULL,
@@ -198,7 +273,6 @@ CREATE TABLE habitatComments (
 	FOREIGN KEY (habitat) REFERENCES habitats(habitatId) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS animals;
 CREATE TABLE animals (
 	animalId INT AUTO_INCREMENT,
 	name VARCHAR(100) NOT NULL UNIQUE,
@@ -209,7 +283,6 @@ CREATE TABLE animals (
 	FOREIGN KEY (habitat) REFERENCES habitats(habitatId) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS animalThumbnails;
 CREATE TABLE animalThumbnails (
 	animalThumbId INT AUTO_INCREMENT,
 	animal INT NOT NULL,
@@ -218,7 +291,6 @@ CREATE TABLE animalThumbnails (
 	FOREIGN KEY (animal) REFERENCES animals(animalId) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS animalReports;
 CREATE TABLE animalReports (
 	animalReportId INT AUTO_INCREMENT,
 	animal INT NOT NULL,
@@ -230,7 +302,6 @@ CREATE TABLE animalReports (
 	FOREIGN KEY (animal) REFERENCES animals(animalId) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS animalFoodReports;
 CREATE TABLE animalFoodReports (
 	animalFoodId INT AUTO_INCREMENT,
 	animal INT NOT NULL,
@@ -256,7 +327,7 @@ $res = $sqli->multi_query($req);
 
 if(!$res)
 {
-	echo("Error creating database: " . $sqli->error . "\n\n");
+	echo("Error creating tables: " . $sqli->error . "\n\n");
 	return;
 }
 else
@@ -265,7 +336,7 @@ else
 	{
 		if(!$sqli->next_result())
 		{
-			echo("Error creating database: " . $sqli->error . "\n\n");
+			echo("Error creating tables: " . $sqli->error . "\n\n");
 			return;
 		}
 	}
@@ -273,10 +344,7 @@ else
 
 echo("\nDatabase created.\n\n");
 
-$req = "INSERT INTO accounts (userId, email, password, role) VALUES (UUID_TO_BIN(UUID()), ?, ?, 'admin');";
-
-$sqli->query("USE arcadia");
-$stmt = $sqli->prepare($req);
+$stmt = $sqli->prepare("INSERT INTO accounts (userId, email, password, role) VALUES (UUID_TO_BIN(UUID()), ?, ?, 'admin');");
 
 if($stmt)
 {

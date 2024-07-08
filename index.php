@@ -4,8 +4,8 @@ require_once("./server/auth.php");
 
 updateCSRFToken();
 
-$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
-$mongo = new MongoDB\Client("mongodb://" . $config->mongo->hostname . ":" . $config->mongo->port);
+$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, $config->sql->database, $config->sql->port);
+$mongo = new MongoDB\Client(getMongoQueryString());
 
 $schedule = $mongo->arcadia->schedule->findOne(["id" => 0]);
 

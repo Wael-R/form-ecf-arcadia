@@ -15,7 +15,7 @@ if($_SERVER['REQUEST_METHOD'] != "POST" || !checkCSRF())
 $id = $_POST["id"];
 $comment = $_POST["comment"] ?? "";
 
-$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
+$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, $config->sql->database, $config->sql->port);
 
 if(strlen($comment) < 1)
 {

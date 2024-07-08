@@ -17,7 +17,7 @@ $title = $_POST["title"] ?? "";
 $description = $_POST["description"] ?? "";
 $delete = $_POST["delete"] ?? "";
 
-$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
+$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, $config->sql->database, $config->sql->port);
 
 if($delete == "")
 {

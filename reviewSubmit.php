@@ -22,7 +22,7 @@ if(strlen($review) < 1)
 	exit("Avis invalide");
 }
 
-$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
+$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, $config->sql->database, $config->sql->port);
 
 $res = $sqli->execute_query("INSERT INTO reviews (name, text) VALUES (?, ?)", [$name, $review]);
 

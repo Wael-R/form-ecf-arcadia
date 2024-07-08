@@ -12,7 +12,7 @@ if($_SERVER['REQUEST_METHOD'] != "GET")
 	exit();
 }
 
-$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
+$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, $config->sql->database, $config->sql->port);
 
 $res = $sqli->execute_query("SELECT reviewId, name, text FROM reviews WHERE NOT validated ORDER BY date DESC;");
 

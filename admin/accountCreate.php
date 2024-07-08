@@ -36,7 +36,7 @@ if(!isEmailAddress($user))
 	exit("Adresse e-mail invalide");
 }
 
-$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
+$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, $config->sql->database, $config->sql->port);
 
 $res = $sqli->execute_query("SELECT BIN_TO_UUID(userId) as userId FROM accounts WHERE email = ?;", [$user]);
 

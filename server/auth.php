@@ -17,6 +17,16 @@ function getCSRFToken()
 	return $_SESSION["csrfToken"] ?? "";
 }
 
+function getMongoQueryString()
+{
+	global $config;
+
+	if($config->mongo->remote)
+		return "mongodb+srv://" . $config->mongo->username . ":" . $config->mongo->password . "@" . $config->mongo->hostname;
+	else
+		return "mongodb://" . $config->mongo->hostname . ":" . $config->mongo->port;
+}
+
 /** Returns a 403 HTTP error alongside a custom message */
 function connectionFail(string $message)
 {
@@ -94,7 +104,7 @@ function authLogin()
 		return;
 	}
 
-	$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
+	$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, $config->sql->database, $config->sql->port);
 
 	$res = $sqli->execute_query("SELECT BIN_TO_UUID(userId) as userId, password FROM accounts WHERE email = ?;", [$user]);
 
@@ -173,7 +183,7 @@ function authCheck(): string
 
 	$sid = $_COOKIE['session'];
 
-	$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
+	$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, $config->sql->database, $config->sql->port);
 
 	$res = $sqli->execute_query("SELECT sessionId, userId, created, ipAddress FROM sessions WHERE token = UUID_TO_BIN(?) AND created > DATE_SUB(NOW(), INTERVAL ? HOUR);", [$sid, $config->sessionTimeout]);
 

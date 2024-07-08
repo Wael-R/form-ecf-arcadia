@@ -1,6 +1,6 @@
 <?php
 require_once("../vendor/autoload.php");
-$mongo = new MongoDB\Client("mongodb://" . $config->mongo->hostname . ":" . $config->mongo->port);
+$mongo = new MongoDB\Client(getMongoQueryString());
 
 $schedule = $mongo->arcadia->schedule->findOne(["id" => 0]);
 

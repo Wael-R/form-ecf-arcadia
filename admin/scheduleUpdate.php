@@ -17,7 +17,7 @@ $from = $_POST["from"];
 $to = $_POST["to"];
 $days = $_POST["days"];
 
-$mongo = new MongoDB\Client("mongodb://" . $config->mongo->hostname . ":" . $config->mongo->port);
+$mongo = new MongoDB\Client(getMongoQueryString());
 
 $schedule = $mongo->arcadia->schedule->findOne(["id" => 0]);
 

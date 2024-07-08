@@ -20,7 +20,7 @@ $thumb = $_POST["thumb"] ?? "";
 $thumbId = $_POST["thumbId"] ?? "";
 $habitat = $_POST["habitat"] ?? "";
 
-$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, "arcadia", $config->sql->port);
+$sqli = new mysqli($config->sql->hostname, $config->sql->username, $config->sql->password, $config->sql->database, $config->sql->port);
 
 if($delete == "" && $thumb == "" && $habitat == "")
 {
