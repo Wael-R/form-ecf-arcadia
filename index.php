@@ -227,7 +227,7 @@ else if($days == 2)
 
 				if(!$success):
 				?>
-				Aucun avis
+				<p class="mb-3">Aucun avis</p>
 				<?php endif; ?>
 			</div>
 
