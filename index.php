@@ -68,7 +68,21 @@ else if($days == 2)
 		<div class="main-row presentation px-2 px-sm-5">
 			<h2 class="text-center fw-bold">Zoo Arcadia</h2>
 			<p class="text-center">
-				lorem ipsum, etc. longer placeholder text because //todo just won't cut it! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+				Bienvenue à Arcadia, votre destination idéale pour découvrir la majesté et la diversité du monde animal dans un cadre naturel et accueillant.
+				Situé au cœur de la nature, notre zoo s'engage à offrir une expérience enrichissante et éducative tout en mettant la santé et le bien-être de nos résidents au premier plan.
+				À Arcadia, nous croyons fermement que chaque animal mérite une attention particulière, c'est pourquoi nous employons une équipe dévouée de vétérinaires expérimentés qui veillent quotidiennement sur leur santé et l'état de leurs habitats.
+
+				<br><br>
+
+				Notre engagement envers le bien-être animal se reflète également dans les environnements soigneusement conçus que nous offrons à nos animaux.
+				Les habitats sont régulièrement contrôlés et entretenus pour garantir qu'ils répondent aux besoins spécifiques de chaque espèce, leur offrant ainsi un cadre de vie optimal et stimulant.
+				Nous invitons nos visiteurs à découvrir cette attention portée aux détails à travers des visites guidées captivantes, où nos experts partagent leur passion et leurs connaissances sur nos fascinants résidents.
+
+				<br><br>
+
+				Pour rendre votre visite à Arcadia encore plus agréable, nous proposons divers services pour toute la famille.
+				Profitez de nos délicieuses options de restauration, explorez le parc à bord de notre charmant petit train, ou participez à une de nos visites guidées pour une immersion complète dans l'univers animalier.
+				Que vous soyez un amoureux des animaux ou simplement à la recherche d'une journée de découverte et de détente, Arcadia est l'endroit idéal pour créer des souvenirs inoubliables.
 			</p>
 
 			<br>
