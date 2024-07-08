@@ -79,6 +79,17 @@ Clone the project into your virtual host folder:
 - through a git gui client
 - or by downloading the project as a zip and extracting it into your virtual host folder
 
+## Install dependencies
+This project depends on the MongoDB and PHPMailer libraries.
+
+[Download and install Composer](https://getcomposer.org/download/)
+
+Open a command prompt:
+- `cd` to the project folder
+- run `composer install`
+
+This will automatically install the required libraries, as defined in `composer.json`.
+
 ## Set up the project
 Open the `server/` folder and run `run-setup.bat`
 

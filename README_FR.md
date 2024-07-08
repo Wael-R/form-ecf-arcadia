@@ -79,6 +79,17 @@ Clonez le projet dans le dossier de votre hôte virtuel:
 - avec un client git graphique
 - ou en téléchargeant le projet en tant que zip et en l'extrayant dans le dossier de votre hôte
 
+## Installer les dépendances
+Ce projet dépend des librairies MongoDB et PHPMailer.
+
+[Téléchargez et installez Composer](https://getcomposer.org/download/)
+
+Ouvrez une ligne de commande:
+- Effectuez un `cd` vers le dossier de votre projet
+- Executez `composer install`
+
+Ceci va automatiquement installer les librairies nécessaires, telles qu'elles sont définies dans `composer.json`.
+
 ## Préparer le projet
 Ouvrez le dossier `server/` et executez `run-setup.bat`
 
