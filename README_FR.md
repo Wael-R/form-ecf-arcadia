@@ -1,5 +1,7 @@
 Repo pour le projet ECF Studi été 2024
 
+[Tests end to end](https://github.com/Wael-R/ecf-arcadia-tests)
+
 [Charte graphique](documents/charte_graphique.pdf)\
 [Documentation technique](documents/documentation_technique.pdf)\
 [Gestion de projet](documents/gestion_projet.pdf)\
