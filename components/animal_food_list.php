@@ -2,7 +2,7 @@
 
 <br><br>
 
-<h5 class="fw-bold">Consommation des animaux</h5>
+<h5 class="fw-bold">Historique de consommation des animaux</h5>
 
 <br>
 
