@@ -1,5 +1,10 @@
 Repo pour le projet ECF Studi été 2024
 
+[Charte graphique](documents/charte_graphique.pdf)\
+[Documentation technique](documents/documentation_technique.pdf)\
+[Gestion de projet](documents/gestion_projet.pdf)\
+[Manuel d'utilisation](documents/manuel.pdf)
+
 [Instructions en français ici](README_FR.md)
 
 **This project uses .htaccess files to prevent unauthorized access to server specific folders**\
